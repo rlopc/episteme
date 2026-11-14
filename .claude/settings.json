@@ -76,7 +76,13 @@
       "mcp__github__sub_issue_write",
       "mcp__github__add_issue_comment",
       "mcp__github__update_issue_comment",
-      "mcp__github__actions_run_trigger"
+      "mcp__github__actions_run_trigger",
+      "Bash(git add -A)",
+      "Bash(git add -A *)",
+      "Bash(git add --all)",
+      "Bash(git add --all *)",
+      "Bash(git add .)",
+      "Bash(git add . *)"
     ],
     "deny": [
       "Bash(git push --force*)",
@@ -96,6 +102,12 @@
       "Edit(/.claude/settings.json)",
       "Edit(/.claude/settings.local.json)",
       "Edit(/.claude/hooks/**)",
+      "Edit(/.devcontainer/**)",
+      "Edit(/.vscode/**)",
+      "Edit(/.git/**)",
+      "Edit(~/.claude/.claude.json)",
+      "Edit(~/.claude/settings.json)",
+      "Read(~/.claude/.credentials.json)",
       "Read(~/Library/Application Support/ivlia/**)",
       "Read(~/.ssh/**)",
       "Read(~/.gnupg/**)",
@@ -110,6 +122,7 @@
     "allowUnsandboxedCommands": false,
     "filesystem": {
       "denyRead": [
+        "~/.claude/.credentials.json",
         "~/Library/Application Support/ivlia",
         "~/.ssh",
         "~/.gnupg",

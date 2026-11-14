@@ -43,12 +43,12 @@ The [PR template](../../.github/pull_request_template.md) lists these checks.
 
 - Tools and dependencies are pinned to exact versions, and every ecosystem has a lockfile: [mise.toml](../../mise.toml) with `mise.lock`, [package.json](../../package.json) with `pnpm-lock.yaml`, and the uv workspace ([pyproject.toml](../../pyproject.toml) at the root and [backend/pyproject.toml](../../backend/pyproject.toml)) with `uv.lock`. pre-commit has no remote hooks: each hook runs a tool locked in one of those lockfiles ([repository.md](repository.md#pre-commit)).
 - Cooldown: a version is used only when it is at least 7 days old.
-  - mise: `minimum_release_age = "7d"` in [mise.toml](../../mise.toml), which `mise upgrade` (`just update-tools`) respects. CI pins mise itself to the same version as the Mac ([ci.md](ci.md#the-ci-job)), and `min_version` in `mise.toml` refuses an older one.
+  - mise: `minimum_release_age = "7d"` in [mise.toml](../../mise.toml), which `mise upgrade` (`just update-tools`) respects. CI and the dev container pin mise itself to one version ([ci.md](ci.md#the-ci-job), [repository.md](repository.md#dev-container)), and `min_version` in `mise.toml` refuses an older one.
   - uv: `exclude-newer = "7 days"` in the root [pyproject.toml](../../pyproject.toml), for the whole workspace, pre-commit included.
   - pnpm: `minimumReleaseAge: 10080` (minutes) in [pnpm-workspace.yaml](../../pnpm-workspace.yaml).
   - Dependabot: `cooldown: default-days: 7` in every ecosystem ([ci.md](ci.md#dependabot)).
 - mise's cooldown needs a release date: for a version without one, mise warns that it could not check it; read the warnings of `just update-tools`.
 - Exceptions (for example an urgent security fix) are explicit and per package: `exclude-newer-package` in uv, `minimumReleaseAgeExclude` in pnpm, `minimum_release_age_excludes` in mise. Dependabot security updates ignore the cooldown.
 - Current exceptions:
-  - mise 2026.11.5 in CI, until 2026-11-16: `mise.lock` is in lockfile format 4, which mise 2026.11.0 (the newest release 7 days old on 2026-11-10) cannot read. CI uses the Mac's version instead.
+  - mise 2026.11.5 in CI and the dev container, until 2026-11-16: `mise.lock` is in lockfile format 4, which mise 2026.11.0 (the newest release 7 days old on 2026-11-10) cannot read.
 - Before using a version, the Validar step re-confirms it ([ai-development.md](ai-development.md#validar)).
