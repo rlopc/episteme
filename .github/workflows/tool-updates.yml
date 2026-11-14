@@ -26,7 +26,9 @@ jobs:
             which upgrades every tool to its newest release at least 7 days
             old and updates mise.lock, and read its warnings. Also check the
             pins nothing updates: mise's version in .github/workflows/ci.yml and
-            release.yml (the same as the Mac's, and min_version in mise.toml),
+            release.yml and in .devcontainer/Dockerfile (the same, and
+            min_version in mise.toml), the dev container's base image tag in
+            .devcontainer/Dockerfile,
             the Ubuntu runner label in every workflow (a newer GA image goes in
             its own pull request),
             uv's required-version in the root pyproject.toml, uv_build's lower

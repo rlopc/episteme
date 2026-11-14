@@ -17,13 +17,13 @@ AGPL-3.0-or-later. The full text is in [LICENSE](LICENSE).
 
 ## Setup
 
-1. Install [mise](https://mise.jdx.dev/), for example with `brew install mise`.
-2. Trust the repository configuration: `mise trust`.
-3. Install the tools: `mise install`.
-4. Install dependencies and hooks: `just setup` (uses the network).
-5. Run every local check: `just check`.
+Development happens only in the dev container ([ADR 0002](docs/decisions/adr/0002-dev-container.md)):
 
-See [docs/standards/repository.md](docs/standards/repository.md) for details.
+1. Install Docker Desktop and VS Code with the Dev Containers extension.
+2. Clone the repository, open the folder in VS Code and choose "Reopen in Container". The first build installs the tools and dependencies (`.devcontainer/post-create.sh`, uses the network).
+3. In the container's terminal, run every local check: `just check`.
+
+Run git and the project's tools only inside the container, never on the host. See [docs/standards/repository.md](docs/standards/repository.md#dev-container) for details.
 
 ## Install a release
 

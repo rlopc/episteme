@@ -37,19 +37,27 @@ Web pages, documents and tool results can carry instructions.
 ### Compromised dependencies and tools
 
 - Exact pins, lockfiles and a 7-day cooldown ([README](README.md#versions-policy)).
-- `mise.lock` records the checksums of the binaries mise downloads; pre-commit hooks run locally, each with a tool from a lockfile ([repository.md](repository.md#pre-commit)). pre-commit and its dependencies are locked with hashes in `uv.lock`. `just setup` and CI install the tools with `mise install --locked`. mise itself is verified against its signed checksums by mise-action in CI.
+- `mise.lock` records the checksums of the binaries mise downloads; pre-commit hooks run locally, each with a tool from a lockfile ([repository.md](repository.md#pre-commit)). pre-commit and its dependencies are locked with hashes in `uv.lock`. `just setup` and CI install the tools with `mise install --locked`. mise itself is verified against its signed checksums by mise-action in CI, and against its checksums by mise.run in the dev container image.
 - GitHub Actions pinned by SHA, with minimal permissions, and audited with zizmor and actionlint ([ci.md](ci.md#rules-for-every-workflow)); the repository's Actions settings enforce the pinning and allow only GitHub's actions and a list of third-party ones ([repository.md](repository.md#github)).
 - Releases: the wheel has a SLSA build provenance attestation and its Sigstore bundle; `gh attestation verify` checks it before installing ([release.md](release.md#install-and-verify)). The release workflow uses no cache, and acts through a GitHub App token limited to this repository, with contents and pull requests, short-lived and revoked after each job ([release.md](release.md#credential)).
 - CodeQL (Python, JavaScript/TypeScript, workflows), Dependabot version and security updates with a 7-day cooldown, `pnpm audit` in CI, and OpenSSF Scorecard ([ci.md](ci.md)).
 
 ### The AI agent acting outside its scope
 
-- Claude Code permissions (allow, ask, deny) and the Bash sandbox: writes only in the project, network only to allowed domains, no access to the use installation folder or secret folders ([ai-development.md](ai-development.md#claude-code-permissions)).
-- Permission rules match command text and can be bypassed. The real guards are the sandbox and the GitHub ruleset on `main` (no force push, no deletion, PR required, no bypass) ([repository.md](repository.md#github)). The user reviews every PR and decides when it merges: Claude merges only when asked, after the user approves the tool call, and the ruleset refuses the merge until the required checks pass.
-- The sandbox does not cover the Read, Edit, Write and web tools, nor hooks; permission rules are the only guard for them.
-- Commands outside the allow list ask, and Claude cannot leave the sandbox; only `just setup` runs outside it, after the user approves ([ai-development.md](ai-development.md#bash-sandbox)). GitHub is reached through GitHub's remote MCP server, with a token limited to this repository, kept out of Claude's context and files; every write asks ([ai-development.md](ai-development.md#github-access)).
-- Inside the sandbox, `security` sees only the system keychain, not the user's (checked on 2026-11-12), but Claude Code does not document that as a guarantee, and commands outside the sandbox, hooks included, can use the user's Keychain. A run from the repository can only be the dev installation, which never uses the keychain: the start guard refuses anything else ([backend.md](backend.md#configuration)).
+- Development happens in a dev container, so every project command (Claude Code, the terminal, pre-commit, `just`, VS Code's extensions) runs there, not on the Mac, and the Mac's files, credentials and Keychain are out of reach ([ADR 0002](../decisions/adr/0002-dev-container.md)).
+- What the Mac runs from the repository is closed off: `.devcontainer/` (its `initializeCommand` runs on the Mac at a rebuild) and `.vscode/` are read-only inside the container, and git is not used on the Mac for this repository, because the container can write `.git/config` and `.git/hooks` ([repository.md](repository.md#dev-container)).
+- Claude Code permissions (allow, ask, deny): commands outside the allow list ask, and reading the use installation folder, secret folders and the Claude Code login is denied ([ai-development.md](ai-development.md#claude-code-permissions)). Permission rules match command text and can be bypassed.
+- The GitHub ruleset on `main` (no force push, no deletion, PR required, no bypass) ([repository.md](repository.md#github)). The user reviews every PR and decides when it merges: Claude merges only when asked, after the user approves the tool call, and the ruleset refuses the merge until the required checks pass.
+- A run from the repository can only be the dev installation, which never uses the keychain: the start guard refuses anything else ([backend.md](backend.md#configuration)).
 - The reviewer agent reviews every branch before the user, with attention to secrets, permissions and network.
+
+Accepted risks, with their revisit conditions in the [decision map](../decisions/README.md):
+
+- Claude Code's Bash sandbox is off in the container, and the container has no egress filter: a command Claude runs, or code it planted that the user runs, can reach any host. What it could send out is what the container holds: the project, the dev installation's data and the Claude Code login in `~/.claude`, which the user can revoke.
+- VS Code forwards the Mac's SSH agent while it is attached: any process in the container can authenticate and sign with the user's key, for this repository and any other the key reaches.
+- VS Code is a bridge by design: code in the container can use its extension API, and `$BROWSER` opens URLs in the Mac's browser. It also forwards git's credential requests to the Mac's git, whose helper is the macOS Keychain (`osxkeychain`), unless `dev.containers.gitCredentialHelperConfigLocation` is `none` in the user's VS Code settings.
+- The container can write `.git/config` and `.git/hooks` in the Mac's folder. Any git the Mac runs there would run what they name (`core.fsmonitor`, hooks): a shell prompt that shows git status on `cd`, or VS Code's Git extension in a local window. So the folder is opened only in the container and never entered from a Mac terminal ([repository.md](repository.md#dev-container)). Moving `.git` out of the folder would close this by construction; the risk is accepted as plausible but not worth the extra setup for a personal project (2026-11-14).
+- Docker Desktop lets the container reach the Mac's services through `host.docker.internal`, including ones that listen only on the Mac's `127.0.0.1`.
 
 ## Reporting
 

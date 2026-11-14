@@ -28,7 +28,7 @@ _.path = ["{{ config_root }}/node_modules/.bin"]
 # Same 7-day cooldown as uv and pnpm, for `mise upgrade` (just update-tools).
 minimum_release_age = "7d"
 lockfile = true
-lockfile_platforms = ["macos-arm64", "linux-x64"]
+lockfile_platforms = ["macos-arm64", "linux-x64", "linux-arm64"]
 # `mise exec` never installs a missing tool on its own (with the network): tools
 # are installed only by `just setup`, with `mise install --locked`.
 exec_auto_install = false

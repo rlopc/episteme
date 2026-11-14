@@ -1,0 +1,59 @@
+{
+  "name": "ivlia",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "vscode",
+
+  // Dependencies live in volumes: faster than the macOS bind mount, and the
+  // Linux binaries never reach the host folder.
+  "mounts": [
+    "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+    "source=ivlia-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=ivlia-frontend-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
+    "source=ivlia-venv-${devcontainerId},target=${containerWorkspaceFolder}/.venv,type=volume",
+    // Read-only inside: the host runs devcontainer.json (initializeCommand) and
+    // VS Code applies .vscode/, so nothing in the container may change them.
+    // Edit them on the host.
+    "source=${localWorkspaceFolder}/.devcontainer,target=${containerWorkspaceFolder}/.devcontainer,type=bind,readonly",
+    "source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,readonly"
+  ],
+  // Keeps ~/.claude.json inside the Claude volume too, so it survives rebuilds.
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    // localhost resolves to ::1 first here, so Vite would listen only on IPv6,
+    // and VS Code's port forwarding connects to 127.0.0.1.
+    "NODE_OPTIONS": "--dns-result-order=ipv4first"
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "waitFor": "postCreateCommand",
+
+  // The API accepts only the origin http://localhost:5173, so the port must not
+  // be remapped; Vite proxies /api to the API inside the container.
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "Vite", "requireLocalPort": true }
+  },
+  "otherPortsAttributes": { "onAutoForward": "ignore" },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "bradlc.vscode-tailwindcss",
+        "charliermarsh.ruff",
+        "davidanson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "ms-playwright.playwright",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "nefrob.vscode-just-syntax",
+        "vitest.explorer"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

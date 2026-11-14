@@ -38,6 +38,9 @@ repos:
         language: unsupported
         types: [text]
         files: &unowned (\.(toml|sh|sql)|(^|/)(justfile|\.gitignore|\.prettierignore|\.python-version))$
+        # It opens every file for writing, even unchanged, and .devcontainer/ is
+        # read-only inside the dev container.
+        exclude: ^\.devcontainer/
         stages: [pre-commit, pre-push, manual]
 
       - id: trailing-whitespace

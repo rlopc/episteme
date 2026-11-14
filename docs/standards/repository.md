@@ -9,7 +9,7 @@ Every development tool meets these rules. Review a tool against them whenever it
 - **Early feedback**: checks run as early as possible: while writing, then at commit, then in CI. Fast checks run first; slow ones in `just check` and CI.
 - **Clear scope**: each tool states which files it covers and which it skips. The files it sees are the versioned ones, and generated files are skipped by every tool.
 - **Consistent**: code, configuration and documentation say the same thing ([documentation rule](README.md#documentation-rule)).
-- **Reproducible**: exact versions from the lockfiles, with checksums where the tool allows it; actions pinned by commit SHA. It works on macOS arm64 and Linux x64, also where mise is not activated.
+- **Reproducible**: exact versions from the lockfiles, with checksums where the tool allows it; actions pinned by commit SHA. It works on macOS arm64, Linux x64 (CI) and Linux arm64 (the dev container), also where mise is not activated.
 - **Up to date**: current releases within the [versions policy](README.md#versions-policy).
 - **Proven**: each check is shown to fail on a bad input, not only to pass (hook tests, rules checked with a forbidden case).
 - **Least privilege**: a tool gets only the network, permissions and secrets it needs; local checks run offline.
@@ -18,14 +18,28 @@ Every development tool meets these rules. Review a tool against them whenever it
 
 ## Tool versions
 
-- [mise.toml](../../mise.toml) pins node, pnpm, uv, just, lychee, gitleaks, actionlint, shellcheck and zizmor. `mise.lock` is enabled (`lockfile = true`) and holds the versions and the checksums of the downloaded binaries for macOS arm64 and Linux x64.
+- [mise.toml](../../mise.toml) pins node, pnpm, uv, just, lychee, gitleaks, actionlint, shellcheck and zizmor. `mise.lock` is enabled (`lockfile = true`) and holds the versions and the checksums of the downloaded binaries for macOS arm64, Linux x64 and Linux arm64 (`lockfile_platforms`).
 - pnpm is pinned only in `mise.toml`, not in `packageManager` of `package.json`: with `packageManager`, pnpm 12 writes `pnpm-lock.yaml` as two YAML documents, which GitHub's dependency graph does not read, so Dependabot would raise no security alerts for JavaScript. Corepack is not used.
 - Python is not in mise: uv installs it, from [.python-version](../../.python-version) at the root (exact patch).
 - The root is a uv workspace ([pyproject.toml](../../pyproject.toml)), as the pnpm workspace is for Node: a non-package root (`package = false`) that holds the repository's Python tools, with `backend/` as its member. One `uv.lock`, one `.venv` and one `.python-version` at the root. uv reads `[tool.uv]` (`required-version`, `exclude-newer`) only from the root.
 - pre-commit and pre-commit-hooks are dev dependencies of the root, locked with hashes in `uv.lock`. `just setup` installs everything with `uv sync --locked --all-packages`: a plain `uv sync` is exact and installs one part only (in `backend/` it removes pre-commit). `uv run` does not remove packages, so the recipes do not have this problem.
 - The root pnpm workspace ([pnpm-workspace.yaml](../../pnpm-workspace.yaml)) holds Prettier, markdownlint-cli2 and OpenSpec as exact dev dependencies, with a single `pnpm-lock.yaml`. `frontend/` is its other package ([frontend.md](frontend.md)).
-- `.mise/` (mise local state) is gitignored. A fresh clone needs `mise trust` before `mise install`. `just setup` and CI install with `mise install --locked`: every tool has a URL and a checksum for both platforms in `mise.lock`. `exec_auto_install = false`: `mise exec` never installs a missing tool on its own.
+- `.mise/` (mise local state) is gitignored. A fresh clone needs `mise trust` before `mise install`. `just setup` and CI install with `mise install --locked`: every tool has a URL and a checksum for each platform in `mise.lock`. `exec_auto_install = false`: `mise exec` never installs a missing tool on its own.
 - `[env]` in `mise.toml` also sets `IVLIA_ENV=dev` and `IVLIA_HOME=<repo>/.dev`, so any command in the repository uses the dev installation ([backend.md](backend.md#configuration)).
+
+## Dev container
+
+Development happens only in the dev container defined in [.devcontainer/](../../.devcontainer/devcontainer.json), opened from the Mac's VS Code with "Reopen in Container" ([ADR 0002](../decisions/adr/0002-dev-container.md)).
+
+- Image: [Dockerfile](../../.devcontainer/Dockerfile) on `mcr.microsoft.com/devcontainers/base:3-ubuntu26.04` (image major 3: patches, no major or Ubuntu jumps). It adds only mise, the version in `min_version` of `mise.toml`, verified by mise.run against its checksums, and Claude Code from the stable channel, which updates itself. The user is `vscode`.
+- [post-create.sh](../../.devcontainer/post-create.sh) runs once per container: `mise trust`, `mise install --locked`, `just setup`, `uv python install` (the hook's Python, [ai-development.md](ai-development.md#hooks)) and Playwright's system packages for Chromium, as CI does. VS Code waits for it (`waitFor`).
+- Mounts: the project folder from the Mac. `node_modules`, `frontend/node_modules` and `.venv` in volumes, faster than the macOS bind mount, so the Linux binaries never reach the host folder. Claude Code's `~/.claude` in a volume per container (`CLAUDE_CONFIG_DIR`), so its login survives rebuilds. `.devcontainer/` and `.vscode/` read-only: the Mac runs `devcontainer.json` and VS Code applies `.vscode/`, so they are edited on the Mac, not from the container.
+- Git is used only inside the container, never on the Mac for this repository: the container can write `.git/config` and `.git/hooks`, which the Mac's git would run. That includes git run implicitly: a shell prompt that shows git status, or VS Code's Git extension. So open the folder with "Dev Containers: Open Folder in Container…" (or the recent entry marked Dev Container) from an empty window, not as a local folder, and do not `cd` into it from a Mac terminal ([security.md](security.md#the-ai-agent-acting-outside-its-scope)).
+- A branch switch, merge or pull that changes `.devcontainer/` or `.vscode/` fails inside the container, because git cannot write the read-only mounts. Those paths change only in their own pull request: the user copies the changed files in on the Mac before switching, then rebuilds.
+- Port 5173 (Vite) is forwarded with `requireLocalPort`, because the API accepts only the origin `http://localhost:5173`; other ports are not auto-forwarded. `NODE_OPTIONS=--dns-result-order=ipv4first` makes Vite listen on `127.0.0.1`, which VS Code's forwarding connects to; otherwise `localhost` resolves to `::1` first and the page loads empty.
+- Extensions are listed in `devcontainer.json` (see [Editor](#editor)); the terminal defaults to bash, where mise is activated.
+- Changes to `.devcontainer/` (and to `containerEnv`) take effect after "Rebuild Container".
+- pre-commit's `end-of-file-fixer` skips `.devcontainer/`: it opens every file for writing, even unchanged, which fails on the read-only mount. `trailing-whitespace` writes only on a change, so it still runs there.
 
 ## `just` recipes
 
@@ -35,7 +49,7 @@ Defined in the [justfile](../../justfile). It exports `OPENSPEC_TELEMETRY=0`, `D
 - `just check`: every local check, stopping at the first error: `pre-commit run --all-files`, `gitleaks git`, the test of the researcher's guard hook, `openspec validate --all --strict`, `just check-links --offline`, `just check-backend` and `just check-frontend`.
 - `just check-links`: lychee on every versioned Markdown file ([link checking](#link-checking)); extra arguments go to lychee.
 - `just check-backend`: mypy, import-linter, and the tests under coverage with its two reports ([backend.md](backend.md#tests-and-coverage)). All through `uv run --locked`. ruff runs in pre-commit.
-- `just check-frontend`: the contract check, knip, Vitest with coverage, the build (`tsc -b`, then `vite build`) and Playwright ([frontend.md](frontend.md)). ESLint and Prettier run in pre-commit. Playwright starts a server and a browser, so it runs outside Claude Code's sandbox.
+- `just check-frontend`: the contract check, knip, Vitest with coverage, the build (`tsc -b`, then `vite build`) and Playwright ([frontend.md](frontend.md)). ESLint and Prettier run in pre-commit. Playwright starts a server and a browser, so outside the dev container it runs outside Claude Code's sandbox.
 - `just contract`: exports the event contract and the OpenAPI document, and generates the frontend's types and validator ([api.md](api.md#export)).
 - `just dev`: `ivlia-server --reload` on port 8766, for the dev installation.
 - `just dev-web`: `just dev` and the Vite dev server together; `ivlia web` opens Vite ([frontend.md](frontend.md#development)).
@@ -78,7 +92,7 @@ Never edited by hand; regenerated with their command and excluded from Prettier 
 
 ## Editor
 
-[.vscode/extensions.json](../../.vscode/extensions.json) recommends the extensions that run the project's checks while writing: ESLint, Prettier, markdownlint, Ruff and Mypy, with the Python extension. [.vscode/settings.json](../../.vscode/settings.json) makes them follow the same checks:
+[.devcontainer/devcontainer.json](../../.devcontainer/devcontainer.json) installs the extensions inside the development container: those that run the project's checks while writing (ESLint, Prettier, markdownlint, Ruff and Mypy, with the Python extension) and those for Tailwind CSS, Vitest, Playwright, GitHub Actions, just and Claude Code. [.vscode/settings.json](../../.vscode/settings.json) makes them follow the same checks:
 
 - The Mypy extension runs from the nearest `pyproject.toml` (`backend/`), so it reads the project's mypy configuration, and uses the project's mypy, not its bundled one.
 - Pylance type checking is off: mypy is the only type checker, in the terminal and in CI.
