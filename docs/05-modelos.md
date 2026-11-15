@@ -25,7 +25,7 @@ Estos son los modelos que el usuario ya ha probado en sus proyectos de inglés. 
 - Motor de ejecución inicial: Ollama para el modelo de lenguaje y los embeddings. El reordenador corre en el propio proceso de ivlia, detrás del puerto Reranker.
 - Ningún modelo concreto está fijado. Se eligen con las evaluaciones propias de ivlia, y cada cambio se decide con datos.
 - Solo modelos locales por ahora. El puerto está preparado para modelos externos (otro equipo de la red local o nube), cada uno con un nivel de datos máximo declarado (ver «06 Datos y seguridad»).
-- Todos los modelos locales configurados se cargan al arrancar y se mantienen en memoria; cada adaptador de motor lo garantiza con los medios de su motor. ivlia usa su propia instancia del motor; en desarrollo, el backend del devcontainer usa el Ollama del Mac por `host.docker.internal`, porque Docker Desktop no da la GPU a los contenedores. Al arrancar comprueba que los modelos caben en el límite de memoria configurado; si no caben, no arranca y dice qué falla.
+- Todos los modelos locales configurados se cargan al arrancar y se mantienen en memoria; cada adaptador de motor lo garantiza con los medios de su motor. ivlia usa su propia instancia del motor; en desarrollo, el backend del devcontainer usa por `host.docker.internal` el Ollama que el usuario arranca en el Mac, no una instancia propia, porque Docker Desktop no da la GPU a los contenedores. Al arrancar comprueba que los modelos caben en el límite de memoria configurado; si no caben, no arranca y dice qué falla.
 - Si un modelo falla, ivlia reintenta un número limitado de veces y después informa del error. Nunca cambia de modelo en silencio. Si falla una pieza opcional, como el reordenador, sigue sin ella y lo avisa.
 
 ## Fuentes

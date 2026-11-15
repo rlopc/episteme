@@ -9,7 +9,7 @@
 
 ## Current state
 
-- **Fase 0** is done (release v0.1.0): the development environment works end to end with a hello-world chat. It was extended on 2026-11-14: development now happens in a dev container ([ADR 0002](docs/decisions/adr/0002-dev-container.md)); the next slices are re-evaluated against it before slice 2 ([docs/10](docs/10-plan-y-pendientes.md)), built with OpenSpec.
+- **Fase 0** is done (release v0.1.0): the development environment works end to end with a hello-world chat. It was extended on 2026-11-14: development now happens in a dev container ([ADR 0002](docs/decisions/adr/0002-dev-container.md)); the next slices, built with OpenSpec, were re-evaluated against it on 2026-11-15: only Ollama changes (in development the backend uses the Mac's Ollama, [docs/05](docs/05-modelos.md)).
 - The backend is the Python package in `backend/`, CLI included: [backend](docs/standards/backend.md), [API](docs/standards/api.md). The SPA is in `frontend/`: [frontend](docs/standards/frontend.md). Decisions: [decision map](docs/decisions/README.md).
 - You run inside the dev container ([repository](docs/standards/repository.md#dev-container)), which `.devcontainer/post-create.sh` sets up; run every local check with `just check`. `.devcontainer/` and `.vscode/` are read-only here: prepare changes to them for the user, who applies them on the host. CI runs the same checks and more: [ci](docs/standards/ci.md). Releases: [release](docs/standards/release.md).
 - How the project is built and checked: the standards document, `docs/standards/README.md`.
