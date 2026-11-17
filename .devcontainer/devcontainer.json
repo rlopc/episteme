@@ -49,6 +49,7 @@
         "ms-python.mypy-type-checker",
         "ms-python.python",
         "nefrob.vscode-just-syntax",
+        "streetsidesoftware.code-spell-checker",
         "vitest.explorer"
       ],
       "settings": {
