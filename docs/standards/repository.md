@@ -22,8 +22,8 @@ Every development tool meets these rules. Review a tool against them whenever it
 - pnpm is pinned only in `mise.toml`, not in `packageManager` of `package.json`: with `packageManager`, pnpm 12 writes `pnpm-lock.yaml` as two YAML documents, which GitHub's dependency graph does not read, so Dependabot would raise no security alerts for JavaScript. Corepack is not used.
 - Python is not in mise: uv installs it, from [.python-version](../../.python-version) at the root (exact patch).
 - The root is a uv workspace ([pyproject.toml](../../pyproject.toml)), as the pnpm workspace is for Node: a non-package root (`package = false`) that holds the repository's Python tools, with `backend/` as its member. One `uv.lock`, one `.venv` and one `.python-version` at the root. uv reads `[tool.uv]` (`required-version`, `exclude-newer`) only from the root.
-- pre-commit and pre-commit-hooks are dev dependencies of the root, locked with hashes in `uv.lock`. `just setup` installs everything with `uv sync --locked --all-packages`: a plain `uv sync` is exact and installs one part only (in `backend/` it removes pre-commit). `uv run` does not remove packages, so the recipes do not have this problem.
-- The root pnpm workspace ([pnpm-workspace.yaml](../../pnpm-workspace.yaml)) holds Prettier, markdownlint-cli2 and OpenSpec as exact dev dependencies, with a single `pnpm-lock.yaml`. `frontend/` is its other package ([frontend.md](frontend.md)).
+- pre-commit, pre-commit-hooks and codespell are dev dependencies of the root, locked with hashes in `uv.lock`. `just setup` installs everything with `uv sync --locked --all-packages`: a plain `uv sync` is exact and installs one part only (in `backend/` it removes pre-commit). `uv run` does not remove packages, so the recipes do not have this problem.
+- The root pnpm workspace ([pnpm-workspace.yaml](../../pnpm-workspace.yaml)) holds Prettier, markdownlint-cli2, cspell (with `@cspell/dict-es-es`) and OpenSpec as exact dev dependencies, with a single `pnpm-lock.yaml`. `frontend/` is its other package ([frontend.md](frontend.md)).
 - `.mise/` (mise local state) is gitignored. A fresh clone needs `mise trust` before `mise install`. `just setup` and CI install with `mise install --locked`: every tool has a URL and a checksum for each platform in `mise.lock`. `exec_auto_install = false`: `mise exec` never installs a missing tool on its own.
 - `[env]` in `mise.toml` also sets `IVLIA_ENV=dev` and `IVLIA_HOME=<repo>/.dev`, so any command in the repository uses the dev installation ([backend.md](backend.md#configuration)).
 
@@ -62,11 +62,12 @@ Configured in [.pre-commit-config.yaml](../../.pre-commit-config.yaml), with pre
 
 - Rule: every hook is local and runs a tool with a lockfile, at the locked version. Local hooks use `language: unsupported` and call their tool through `mise exec --`, so they work where mise is not activated (IDEs, git GUIs, a shell started before activation). There are no remote hooks, so Dependabot has nothing to update here.
   - gitleaks, actionlint, zizmor and shellcheck: installed by mise (binaries whose checksums `mise.lock` records). zizmor and shellcheck keep the `files`, `types` and `require_serial` of their upstream hooks; zizmor adds `--offline`, so it never uses the network locally. shellcheck on `PATH` also lets actionlint check the workflows' `run:` scripts.
-  - markdownlint-cli2 and Prettier: run through pnpm.
+  - markdownlint-cli2, cspell and Prettier: run through pnpm.
+  - codespell: run through `uv run --locked`, from the root's dev group.
   - ESLint: run through its binary in `frontend/node_modules/.bin`, from the root: ESLint 10 finds `frontend/eslint.config.js` from each file's folder.
   - ruff format and ruff check: run through `uv run --locked --project backend`.
   - pre-commit-hooks: run through `uv run --locked`, from the root's dev group.
-- Hooks: pre-commit-hooks' commit checks, with the stages of their upstream definitions (`check-added-large-files`, 500 kB, with `--enforce-all` so `just check` and CI check every file, lockfiles excluded because they grow on their own; `check-case-conflict`, because macOS ignores case and CI does not; `check-merge-conflict` with `--assume-in-merge`, so it also runs outside a merge and in CI), its `end-of-file-fixer` and `trailing-whitespace` on the text files no formatter owns (see [formatting](#formatting)), gitleaks (staged changes), actionlint (workflows), zizmor, shellcheck, markdownlint-cli2 with `--fix`, ESLint with `--fix` on JavaScript and TypeScript in `frontend/`, ruff check with `--fix` before ruff format, as Ruff recommends (Python in `backend/` and `.claude/hooks/`), and Prettier on every file, after ESLint (`--ignore-unknown` and `.prettierignore` decide).
+- Hooks: pre-commit-hooks' commit checks, with the stages of their upstream definitions (`check-added-large-files`, 500 kB, with `--enforce-all` so `just check` and CI check every file, lockfiles excluded because they grow on their own; `check-case-conflict`, because macOS ignores case and CI does not; `check-merge-conflict` with `--assume-in-merge`, so it also runs outside a merge and in CI), its `end-of-file-fixer` and `trailing-whitespace` on the text files no formatter owns (see [formatting](#formatting)), gitleaks (staged changes), actionlint (workflows), zizmor, shellcheck, markdownlint-cli2 with `--fix`, [spell checking](#spell-checking), ESLint with `--fix` on JavaScript and TypeScript in `frontend/`, ruff check with `--fix` before ruff format, as Ruff recommends (Python in `backend/` and `.claude/hooks/`), and Prettier on every file, after ESLint (`--ignore-unknown` and `.prettierignore` decide).
 - A hook that changes files fails that run; running `just check` again passes.
 - `minimum_pre_commit_version` is set. prek is not used: it is still 0.x; revisit at 1.0.
 
@@ -77,6 +78,14 @@ Configured in [.pre-commit-config.yaml](../../.pre-commit-config.yaml), with pre
 - Text files that no formatter owns (TOML, shell, SQL, `justfile`, the ignore files, `.python-version`): pre-commit-hooks' `end-of-file-fixer` and `trailing-whitespace`, through `uv run --locked` (it is a root dev dependency). One `files` pattern in `.pre-commit-config.yaml` (`*unowned`). `LICENSE` is left out: its text is copied verbatim.
 - markdownlint-cli2 owns Markdown. Rules are in [.markdownlint.jsonc](../../.markdownlint.jsonc), each with its reason: line length and first-line-heading rules off, duplicate headings allowed between non-siblings. Skipped files are in [.markdownlint-cli2.jsonc](../../.markdownlint-cli2.jsonc).
 - shellcheck: SC2016 is disabled only in `.claude/hooks/researcher-bash-guard.test.sh`, with a reason (literal test commands and files).
+
+## Spell checking
+
+Split by file type, because codespell only knows English misspellings and cspell needs a dictionary per language:
+
+- cspell checks Markdown, in Spanish and English ([cspell.config.yaml](../../cspell.config.yaml)): `language: es,es-ES,en,en-US`, the Spanish dictionary imported from `@cspell/dict-es-es` (cspell does not bundle it), cspell's software dictionaries, and the project's words in `words`. It skips gitignored files (`useGitignore`) and generated Markdown. Words go in lowercase: the Spanish dictionary turns on case sensitivity, and a lowercase word also accepts its capitalized forms. Spanish forms with a pronoun (*muéstralo*) are often missing from the dictionary and go in `words`.
+- codespell checks every other text file: code, comments, strings and configuration ([pyproject.toml](../../pyproject.toml), `[tool.codespell]`). `skip` holds Markdown and generated files; `check-hidden = true`, because codespell skips hidden files such as `.pre-commit-config.yaml` even when passed by name. False positives go in `ignore-words-list`, each with its reason. It does not read `.gitignore`: run it through pre-commit, which passes only versioned files.
+- The frontend UI text is English and inline in the components (no i18n files), so codespell covers it.
 
 ## Generated files
 

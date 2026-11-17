@@ -10,7 +10,11 @@ requires-python = ">=3.14"
 license = "AGPL-3.0-or-later"
 
 [dependency-groups]
-dev = ["pre-commit==4.7.0", "pre-commit-hooks==6.0.0"]
+dev = [
+    "codespell==2.4.3",
+    "pre-commit==4.7.0",
+    "pre-commit-hooks==6.0.0",
+]
 
 # uv reads [tool.uv] only here, for every member.
 [tool.uv]
@@ -26,3 +30,15 @@ exclude-newer = "7 days"
 
 [tool.uv.workspace]
 members = ["backend"]
+
+# codespell for everything but Markdown, which cspell checks (cspell.config.yaml).
+[tool.codespell]
+# Markdown, generated files, then folders that only a plain `codespell` run
+# walks into (pre-commit passes only versioned files). The leading * matches
+# paths with and without ./ and the bare names match the folders.
+skip = "*.md,uv.lock,pnpm-lock.yaml,mise.lock,CHANGELOG.md,.release-please-manifest.json,*backend/schemas/*,*frontend/src/contract/*,*.claude/commands/opsx/*,*.claude/skills/openspec-*,.git,node_modules,.venv"
+# Hidden files are skipped even when passed by name, such as .pre-commit-config.yaml.
+check-hidden = true
+# hel: a partial token in the streaming tests. afterall: Vitest's afterAll.
+# The rest are Spanish, in .claude/, until it is translated.
+ignore-words-list = "hel,afterall,autor,caracteres,comando,comandos,fiel,hace"

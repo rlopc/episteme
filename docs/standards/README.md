@@ -24,7 +24,7 @@ The standards document describes the current state of the project's tools and pr
 
 Every pull request updates the documentation it affects in the same PR:
 
-- Specs, if behaviour changed.
+- Specs, if behavior changed.
 - This standards document, if tools or practices changed.
 - An ADR, if the decision is hard to reverse and has defensible alternatives.
 - The decision map, if a decision changed.
