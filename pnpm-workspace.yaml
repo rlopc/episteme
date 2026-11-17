@@ -7,3 +7,10 @@ minimumReleaseAge: 10080
 overrides:
   # GHSA-gg6h-894w-4m9c (high): re2js < 2.8.7, through markdownlint 0.42.0.
   re2js: 2.9.1
+# Advisories accepted as tolerable (dev-only, no fixed release). Remove each
+# when a fixed version exists; see docs/standards/repository.md.
+audit:
+  ignore:
+    # GHSA-fc5q-39xc-vjpf (high): picomatch <= 4.0.7 ReDoS, through
+    # markdownlint-cli2, ESLint and other dev tools.
+    - GHSA-fc5q-39xc-vjpf

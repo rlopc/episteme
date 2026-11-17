@@ -27,6 +27,9 @@ dictionaries:
   - docker
   - fullstack
   - git
+# Advisory IDs (GHSA-xxxx-xxxx-xxxx) are not words.
+ignoreRegExpList:
+  - "/GHSA(-[0-9a-z]{4}){3}/gi"
 # Lowercase: the Spanish dictionary turns on caseSensitive, and a lowercase
 # word also accepts its capitalized and uppercase forms.
 words:
