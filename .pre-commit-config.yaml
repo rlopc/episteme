@@ -88,6 +88,22 @@ repos:
         language: unsupported
         types: [markdown]
 
+      # Spell checking: cspell for Markdown, in Spanish and English
+      # (cspell.config.yaml); codespell for every other text file
+      # ([tool.codespell] in pyproject.toml, which skips Markdown and generated files).
+      # --no-must-find-files: no error when every file passed is in ignorePaths.
+      - id: cspell
+        name: cspell
+        entry: mise exec -- pnpm exec cspell --no-progress --no-summary --no-must-find-files
+        language: unsupported
+        types: [markdown]
+
+      - id: codespell
+        name: codespell
+        entry: mise exec -- uv run --locked codespell
+        language: unsupported
+        types: [text]
+
       # Lint before format: fixes can leave code that needs reformatting.
       - id: ruff-check
         name: ruff check

@@ -27,7 +27,7 @@ The plan does not repeat the design. Each step links to the design sections that
 - The plan is temporary. In each step's PR, that step's content is rewritten into the standards document: current state, detailed, no history, linking to config files instead of copying their values. The plan only keeps the ticked checklist.
 - The standards document is `docs/standards/`, with nine files (decision 2026-11-09):
   - `README.md`: index, plus what is common to all areas: Git and PRs, the documentation rule, the versions policy and the cooldown.
-  - `repository.md`: tool versions, `just`, pre-commit, formatting and Markdown checks, repository files, licence, ruleset.
+  - `repository.md`: tool versions, `just`, pre-commit, formatting and Markdown checks, repository files, license, ruleset.
   - `ai-development.md`: Claude Code permissions, hooks and rules; Validar; OpenSpec.
   - `security.md`: the threat model, linking to where each measure lives.
   - `backend.md`: the Python package, including the CLI.
@@ -121,7 +121,7 @@ Order of the first tasks (assumed): initial commit, gitleaks scan, the user crea
 - [x] `README.md` (English): what ivlia is, status (Phase 0), license, link to `docs/`, how to set up (`mise trust`, `mise install`, `just setup`, `just check`).
 - [x] `SECURITY.md`: report vulnerabilities through GitHub private vulnerability reporting; supported versions: latest release only (assumed).
 - [x] `CONTRIBUTING.md`, short: issues welcome, external PRs not accepted for now (decision 2026-11-09).
-- [x] `.github/pull_request_template.md`: summary, Validar summary, and a docs checklist: specs updated if behaviour changed, standards document updated if tools or practices changed, ADR if the decision is hard to reverse, decision map updated, obsolete descriptions fixed. Source: [docs/08](../08-ingenieria-y-calidad.md) ("Documentación en tres capas") and [docs/09](../09-ia-en-el-desarrollo.md) ("Documentación").
+- [x] `.github/pull_request_template.md`: summary, Validar summary, and a docs checklist: specs updated if behavior changed, standards document updated if tools or practices changed, ADR if the decision is hard to reverse, decision map updated, obsolete descriptions fixed. Source: [docs/08](../08-ingenieria-y-calidad.md) ("Documentación en tres capas") and [docs/09](../09-ia-en-el-desarrollo.md) ("Documentación").
 - [x] `.github/ISSUE_TEMPLATE/`: bug report and feature request as issue forms, plus `config.yml` that points security reports to private reporting.
 - [x] No CODEOWNERS, Code of Conduct or DCO until contributions open (decision 2026-11-09).
 - [x] Standards document: the files listed in 1.6. `security.md` holds the threat model required by [docs/06](../06-datos-y-seguridad.md) ("Seguridad"): what it protects (user data by level, secrets, the action log), from whom (prompt injection in external content, malicious local web pages and DNS rebinding, compromised dependencies, leaks to logs or the repo), and how (data and instructions separation, approvals, sandbox, local-only API with token and Host/Origin checks, data levels, gitleaks and GitHub secret scanning, cooldowns, pinned actions), each measure linking to where it lives. The index in `README.md` names the files that do not exist yet without linking them, so the link check passes (assumed).
@@ -155,7 +155,7 @@ Order of the first tasks (assumed): initial commit, gitleaks scan, the user crea
 Creates:
 
 - `README.md`: index; Git and PR rules; the documentation rule; versions policy (links to `mise.toml`, `package.json`, `.pre-commit-config.yaml`) and the 7-day cooldown.
-- `repository.md`: tool versions and the mise lockfile outcome, `just` recipes, pre-commit hooks and the rule "a tool with a lockfile runs as a local hook with the locked version", Prettier and markdownlint scope, link checks, repository files, licence, the ruleset.
+- `repository.md`: tool versions and the mise lockfile outcome, `just` recipes, pre-commit hooks and the rule "a tool with a lockfile runs as a local hook with the locked version", Prettier and markdownlint scope, link checks, repository files, license, the ruleset.
 - `ai-development.md`: Claude Code permissions, sandbox and hooks; the `validar` skill and the `reviewer` agent; OpenSpec usage (from slice 2) and its update. It notes that the push-to-main deny can be bypassed and the ruleset is the real guard.
 - `security.md`: the threat model, with the same note on the push-to-main deny and the ruleset.
 
@@ -179,11 +179,11 @@ Create the Python package `ivlia` in `backend/` with its layers and a hello-worl
 - FastAPI native SSE (`fastapi.sse.EventSourceResponse`), the `itemSchema` it emits, and `openapi_version="3.2.0"`.
 - pydantic discriminated union export (JSON Schema 2020-12, `oneOf` + `discriminator.mapping`).
 - `PRAGMA user_version` inside a transaction with Python 3.14 `sqlite3` transaction control.
-- import-linter: `include_external_packages = true`, layers and forbidden contracts, behaviour with modules that do not exist yet (`application/maintenance` stays empty until slice 2).
+- import-linter: `include_external_packages = true`, layers and forbidden contracts, behavior with modules that do not exist yet (`application/maintenance` stays empty until slice 2).
 - coverage.py: one run, two reports with `--include`/`--omit` and `--fail-under`.
 - ruff rule families: a curated list, each family with its reason. The list is shown to the user before it goes into `pyproject.toml` (decision 2026-11-09).
 - MADR: the current minimal template, for ADR 0001.
-- For step 3 (decision 2026-11-09): Typer 0.28.0, and httpx2 version, licence and SSE API (`EventSource`). Fits: use httpx2. Does not fit: httpx plus an own SSE reader. The user is told the outcome.
+- For step 3 (decision 2026-11-09): Typer 0.28.0, and httpx2 version, license and SSE API (`EventSource`). Fits: use httpx2. Does not fit: httpx plus an own SSE reader. The user is told the outcome.
 - uvicorn reload with an own entry point (`ivlia-server`).
 - Whether a cookie with `Secure` on `http://localhost` is kept and sent by Chrome, Firefox and Safari (decision 2026-11-09). All three: add `Secure` to the session cookie. Not all: leave it out and record why in `api.md`. The user is told the outcome.
 - Whether uv writes `direct_url.json` (PEP 610) with `dir_info` for the editable install of `backend/`, and `archive_info` for `uv tool install` from a wheel (decision 2026-11-09). Yes: the start guard uses it. No: Claude stops and discusses another detection with the user.
@@ -529,4 +529,4 @@ Status: done. PR title: `docs(docs): archive phase 0 plan`. Only after the step 
 
 - Design: `docs/00` to `docs/10`, read in full on 2026-11-09; after that day's design changes, the changed sections of docs/02, 06, 07, 08, 09 and 10 were re-read in part.
 - User decisions of 2026-11-09, recorded in this plan as "(decision 2026-11-09)".
-- Tool versions and behaviours named in this plan were checked on 2026-11-09, during planning, against official registries and documentation (PyPI, npm, GitHub releases and the projects' docs). This plan did not re-read them. Each step's Validar re-confirms them before use and records the sources it read in the standards document.
+- Tool versions and behaviors named in this plan were checked on 2026-11-09, during planning, against official registries and documentation (PyPI, npm, GitHub releases and the projects' docs). This plan did not re-read them. Each step's Validar re-confirms them before use and records the sources it read in the standards document.

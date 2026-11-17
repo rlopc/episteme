@@ -12,7 +12,7 @@
 
 ## Documentation checklist
 
-- [ ] Specs updated, if behaviour changed.
+- [ ] Specs updated, if behavior changed.
 - [ ] Standards document (`docs/standards/`) updated, if tools or practices changed.
 - [ ] ADR added, if the decision is hard to reverse.
 - [ ] Decision map updated.
