@@ -33,12 +33,12 @@ members = ["backend"]
 
 # codespell for everything but Markdown, which cspell checks (cspell.config.yaml).
 [tool.codespell]
-# Markdown, generated files, then folders that only a plain `codespell` run
-# walks into (pre-commit passes only versioned files). The leading * matches
-# paths with and without ./ and the bare names match the folders.
+# Markdown and generated files. The leading * matches paths with and without ./.
+# codespell does not read .gitignore: run it through pre-commit, which passes
+# only versioned files; the bare folder names only spare a plain run the worst.
 skip = "*.md,uv.lock,pnpm-lock.yaml,mise.lock,CHANGELOG.md,.release-please-manifest.json,*backend/schemas/*,*frontend/src/contract/*,*.claude/commands/opsx/*,*.claude/skills/openspec-*,.git,node_modules,.venv"
 # Hidden files are skipped even when passed by name, such as .pre-commit-config.yaml.
 check-hidden = true
 # hel: a partial token in the streaming tests. afterall: Vitest's afterAll.
-# The rest are Spanish, in .claude/, until it is translated.
+# The rest are Spanish, in .claude/; remove them once it is translated.
 ignore-words-list = "hel,afterall,autor,caracteres,comando,comandos,fiel,hace"

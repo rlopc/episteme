@@ -81,15 +81,15 @@ Configured in [.pre-commit-config.yaml](../../.pre-commit-config.yaml), with pre
 
 ## Spell checking
 
-Split by file type, because codespell only knows English misspellings and cspell needs a dictionary per language:
+Split by file type. codespell only reports known English misspellings, so it has few false positives on code identifiers, but it does not know Spanish. cspell checks every word against its dictionaries, so it handles Spanish prose but would report every identifier not in them:
 
 - cspell checks Markdown, in Spanish and English ([cspell.config.yaml](../../cspell.config.yaml)): `language: es,es-ES,en,en-US`, the Spanish dictionary imported from `@cspell/dict-es-es` (cspell does not bundle it), cspell's software dictionaries, and the project's words in `words`. It skips gitignored files (`useGitignore`) and generated Markdown. Words go in lowercase: the Spanish dictionary turns on case sensitivity, and a lowercase word also accepts its capitalized forms. Spanish forms with a pronoun (*muéstralo*) are often missing from the dictionary and go in `words`.
-- codespell checks every other text file: code, comments, strings and configuration ([pyproject.toml](../../pyproject.toml), `[tool.codespell]`). `skip` holds Markdown and generated files; `check-hidden = true`, because codespell skips hidden files such as `.pre-commit-config.yaml` even when passed by name. False positives go in `ignore-words-list`, each with its reason. It does not read `.gitignore`: run it through pre-commit, which passes only versioned files.
+- codespell checks every other text file: code, comments, strings and configuration ([pyproject.toml](../../pyproject.toml), `[tool.codespell]`). `skip` holds Markdown and generated files; `check-hidden = true`, because codespell skips hidden files such as `.pre-commit-config.yaml` even when passed by name. False positives go in `ignore-words-list`, each with its reason; the Spanish ones, from `.claude/`, are removed once it is translated. It does not read `.gitignore`: run it through pre-commit, which passes only versioned files.
 - The frontend UI text is English and inline in the components (no i18n files), so codespell covers it.
 
 ## Generated files
 
-Never edited by hand; regenerated with their command and excluded from Prettier and markdownlint.
+Never edited by hand; regenerated with their command and excluded from Prettier, markdownlint and the spell checkers.
 
 - Lockfiles: `pnpm-lock.yaml`, `mise.lock` (regenerate with `mise lock`), and `uv.lock` (regenerate with `uv lock`).
 - `CHANGELOG.md` and `.release-please-manifest.json`: written by release-please ([release.md](release.md#versioning-and-changelog)).
@@ -101,10 +101,11 @@ Never edited by hand; regenerated with their command and excluded from Prettier 
 
 ## Editor
 
-[.devcontainer/devcontainer.json](../../.devcontainer/devcontainer.json) installs the extensions inside the development container: those that run the project's checks while writing (ESLint, Prettier, markdownlint, Ruff and Mypy, with the Python extension) and those for Tailwind CSS, Vitest, Playwright, GitHub Actions, just and Claude Code. [.vscode/settings.json](../../.vscode/settings.json) makes them follow the same checks:
+[.devcontainer/devcontainer.json](../../.devcontainer/devcontainer.json) installs the extensions inside the development container: those that run the project's checks while writing (ESLint, Prettier, markdownlint, Code Spell Checker, Ruff and Mypy, with the Python extension) and those for Tailwind CSS, Vitest, Playwright, GitHub Actions, just and Claude Code. [.vscode/settings.json](../../.vscode/settings.json) makes them follow the same checks:
 
 - The Mypy extension runs from the nearest `pyproject.toml` (`backend/`), so it reads the project's mypy configuration, and uses the project's mypy, not its bundled one.
 - Pylance type checking is off: mypy is the only type checker, in the terminal and in CI.
+- Code Spell Checker reads [cspell.config.yaml](../../cspell.config.yaml) (cspell's own config search) with the project's Spanish dictionary from `node_modules`; `enabledFileTypes` limits it to Markdown, as in pre-commit, because codespell owns the code.
 - Known deviation: the markdownlint extension bundles its own markdownlint-cli2 (0.23.2 in extension 0.62.1, checked 2026-11-11) and has no setting to use the project's. It reads the same config files, so it stays as early feedback; pre-commit and CI, with the project's version, decide.
 
 ## Link checking
