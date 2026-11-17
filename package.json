@@ -4,7 +4,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@cspell/dict-es-es": "3.0.9",
-    "@fission-ai/openspec": "1.16.0",
+    "@fission-ai/openspec": "1.17.0",
     "cspell": "10.4.1",
     "markdownlint-cli2": "0.24.0",
     "prettier": "3.9.10"
