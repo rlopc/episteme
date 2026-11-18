@@ -28,7 +28,7 @@ zizmor and actionlint check them in pre-commit, so in `just check` too.
 - No `pull_request_target`: there are no fork pull requests, and `pull_request` needs no write token.
 - Issues are opened with `gh` and `issues: write`, not with third-party actions.
 - Each job has a `timeout-minutes`.
-- Each job runs on a fixed Ubuntu label (`ubuntu-24.04`), not `ubuntu-latest`, which GitHub moves to each new image over several weeks; runner-images suggests a fixed label "to avoid unwanted migration". Each newer GA image comes in its own pull request ([decision map](../decisions/README.md)).
+- Each job runs on a fixed Ubuntu label (`ubuntu-26.04`), not `ubuntu-latest`, which GitHub moves to each new image over several weeks; runner-images suggests a fixed label "to avoid unwanted migration". Each newer GA image comes in its own pull request ([decision map](../decisions/README.md)).
 - A stacked pull request retargeted to `main` gets no new `just check` or CodeQL run (the base change is an `edited` event, which only `pr-title.yml` listens to): merge `main` into its branch and push, so every required check runs against `main`.
 
 ## The CI job
