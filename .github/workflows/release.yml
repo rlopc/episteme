@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   release-please:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     # The App's private key is a secret of this environment, which only main
     # can use, so no workflow run for a branch or pull request can read it.
     environment: release
@@ -49,7 +49,7 @@ jobs:
   # release branch.
   sync:
     needs: release-please
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     environment: release
     timeout-minutes: 10
     permissions: {}
@@ -112,7 +112,7 @@ jobs:
   publish:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     permissions:
       contents: write

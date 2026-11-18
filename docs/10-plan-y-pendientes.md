@@ -32,7 +32,7 @@ Las rebanadas posteriores (agente Code, agente Learning, voz, grafo de conocimie
 | Copias de seguridad: qué se copia, dónde y cómo se cifra | Antes de la rebanada 2 |
 | Servicio launchd y su instalación | Antes del primer uso real |
 | Cómo se detecta que un hecho actualiza a otro | Rebanada 7 |
-| Pasar los workflows de `ubuntu-24.04` a `ubuntu-26.04` ([ci.md](standards/ci.md#rules-for-every-workflow)) | Después de fusionar las PR apiladas pendientes, en su propia PR |
+| Pasar de actionlint, sin versiones desde marzo, a jactionlint, con Validar y en su propia PR ([repository.md](standards/repository.md#known-limitations-and-risks-to-revisit)) | Cuando jactionlint se estabilice o actionlint vuelva a no conocer algo de un workflow |
 | Filtro de salida a internet en el devcontainer, por dominio y no por IP (por ejemplo, un proxy como contenedor aparte). El `init-firewall.sh` de referencia filtra por IP y falla cuando cambian las direcciones de las CDN ([ADR 0002](decisions/adr/0002-dev-container.md)) | Antes de dar a un agente herramientas de escritura, o si se decide endurecer el entorno |
 | Sandbox de Claude Code dentro del devcontainer: el perfil seccomp por defecto de Docker bloquea los *user namespaces*. Opciones: un perfil seccomp propio (el de Docker más lo mínimo para bubblewrap) o `seccomp=unconfined` ([ai-development.md](standards/ai-development.md#bash-sandbox)) | Si aparece un perfil mantenido o soporte documentado |
 | Fijar la imagen base del devcontainer por digest y que Dependabot la actualice (ecosistema `docker` en `/.devcontainer`, con el periodo de espera) | Cuando se quiera reproducir exactamente cada reconstrucción |
