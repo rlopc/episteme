@@ -11,6 +11,7 @@ How the repository's pull requests are handled: [ci.md](../../../docs/standards/
 ## Rules
 
 - GitHub is reached only through the `github` MCP server's tools (`mcp__github__*`); `owner` and `repo` come from `git remote get-url origin`. Never `gh` or `curl`.
+- The server is read-only for now (`/mcp/readonly`), so its write tools do not exist: for each write below, give the user the exact step (GitHub's web UI, or `gh` on the Mac with `--repo rlopc/ivlia`) and wait.
 - Reads run without asking; every write tool asks the user. Never look for a way around a prompt; if one is refused, stop and say what is missing.
 - Claude does not push: when a branch needs pushing, give the user the exact command (`git push -u origin <branch>`) and wait.
 - Titles, bodies and comments are in English.
@@ -46,4 +47,4 @@ A pull request whose base was squash-merged is retargeted to `main` by GitHub, a
 
 ## Merge
 
-When the user asks: `merge_pull_request` with the squash method. The ruleset on `main` refuses the merge until the required checks pass. Then update the next stacked pull request, if there is one.
+When the user asks: `merge_pull_request` with the squash method (while the server is read-only, the user merges in GitHub's web UI). The ruleset on `main` refuses the merge until the required checks pass. Then update the next stacked pull request, if there is one.
