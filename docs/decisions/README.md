@@ -27,7 +27,7 @@ ADRs live in [adr/](adr/), numbered, in the MADR minimal format. They are immuta
 | One session cookie name per installation (`ivlia_session`, `ivlia_session_dev`) | Final | — | [api.md](../standards/api.md#web-session) |
 | An existing database with pending migrations does not start | Provisional | Slice 2, when backups arrive | [backend.md](../standards/backend.md#migrations) |
 | pre-commit, not prek | Provisional | When prek reaches 1.0 | [repository.md](../standards/repository.md#pre-commit) |
-| actionlint, not the jactionlint fork that mise's registry recommends | Provisional | A workflow needs syntax actionlint does not know, jactionlint settles, or actionlint is archived | [repository.md](../standards/repository.md#known-limitations-and-risks-to-revisit) |
+| actionlint, not the jactionlint fork that mise's registry recommends | Provisional | A workflow needs anything else actionlint does not know (the `ubuntu-26.04` label is declared in `.github/actionlint.yaml`), jactionlint settles, or actionlint is archived | [repository.md](../standards/repository.md#known-limitations-and-risks-to-revisit) |
 | gitleaks for secret scanning | Provisional | gitleaks is in maintenance mode; revisit Betterleaks, its successor | [repository.md](../standards/repository.md#known-limitations-and-risks-to-revisit) |
 | Workflows on a fixed Ubuntu runner label (`ubuntu-26.04`), not `ubuntu-latest` | Provisional | Each new GA Ubuntu image | [ci.md](../standards/ci.md#rules-for-every-workflow) |
 | CodeQL on pull requests to `main` only, and without `actions: read` | Provisional | If the repository goes private | [ci.md](../standards/ci.md#codeql) |
