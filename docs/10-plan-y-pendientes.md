@@ -38,5 +38,4 @@ Las rebanadas posteriores (agente Code, agente Learning, voz, grafo de conocimie
 | Fijar la imagen base del devcontainer por digest y que Dependabot la actualice (ecosistema `docker` en `/.devcontainer`, con el periodo de espera) | Cuando se quiera reproducir exactamente cada reconstrucción |
 | MCP de LangChain (docs y reference) para Claude, en un `.mcp.json` del repo | Rebanada 2, al entrar LangGraph real |
 | Docker Sandboxes como entorno de desarrollo (probado el 2026-11-14 y no elegido por su madurez, [ADR 0002](decisions/adr/0002-dev-container.md)) | Cuando llegue a la 1.0 |
-| Comprobar que los logs de depuración de Claude Code no guardan las cabeceras de las peticiones MCP (el token va en `Authorization`) | Al conectar el servidor MCP en el devcontainer, con el token en `~/.claude/github-mcp-token` |
 | Reducir el coste de usar Claude Code: modelo por tipo de tarea, sesiones cortas, límites a subagentes, revisiones e investigaciones | Después de la PR de acceso a GitHub |

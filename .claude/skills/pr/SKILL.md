@@ -47,4 +47,4 @@ A pull request whose base was squash-merged is retargeted to `main` by GitHub, a
 
 ## Merge
 
-When the user asks: `merge_pull_request` with the squash method. The ruleset on `main` refuses the merge until the required checks pass. Then update the next stacked pull request, if there is one.
+When the user asks: `merge_pull_request` with the squash method (while the server is read-only, the user merges in GitHub's web UI). The ruleset on `main` refuses the merge until the required checks pass. Then update the next stacked pull request, if there is one.
