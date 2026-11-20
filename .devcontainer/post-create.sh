@@ -14,4 +14,4 @@ mise exec -- uv python install
 # Chromium's system libraries, as in CI; they follow the Playwright version.
 # sudo runs as root, whose mise has no tools: pass the PATH mise resolves for vscode.
 tools_path="$(mise exec -- printenv PATH)"
-sudo env "PATH=$tools_path" pnpm --filter ivlia-frontend exec playwright install-deps chromium
+sudo env "PATH=$tools_path" pnpm --filter episteme-frontend exec playwright install-deps chromium
