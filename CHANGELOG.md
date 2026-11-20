@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/rlopc/episteme/compare/v0.1.2...v0.2.0) (2026-11-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **repo:** rename the project to episteme ([#67](https://github.com/rlopc/episteme/issues/67))
+
+### Code Refactoring
+
+* **repo:** rename the project to episteme ([#67](https://github.com/rlopc/episteme/issues/67)) ([5d033e2](https://github.com/rlopc/episteme/commit/5d033e22f85b699f30f1771f4bfb321762b8cc8c))
+
 ## [0.1.2](https://github.com/rlopc/ivlia/compare/v0.1.1...v0.1.2) (2026-11-12)
 
 
