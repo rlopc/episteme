@@ -36,6 +36,8 @@ gh attestation verify episteme-X.Y.Z-py3-none-any.whl --repo rlopc/episteme \
 uv tool install ./episteme-X.Y.Z-py3-none-any.whl
 ```
 
+Releases v0.1.0 to v0.1.2 were published when the repository was called `ivlia`. Their wheel is `ivlia-X.Y.Z-py3-none-any.whl`, their attestations name `rlopc/ivlia`, and they install `ivlia` and `ivlia-server`. Verify them with `--repo rlopc/ivlia` and `--signer-workflow rlopc/ivlia/.github/workflows/release.yml`. Checked online on 2026-11-20 with v0.1.2 only: `gh release download v0.1.2 -R rlopc/episteme --pattern '*.whl'` works, and `gh attestation verify ivlia-0.1.2-py3-none-any.whl --repo rlopc/ivlia --signer-workflow rlopc/ivlia/.github/workflows/release.yml` passes. Not checked yet for these releases: the offline check.
+
 Details: [docs/standards/release.md](docs/standards/release.md).
 
 ## Contributing and security
