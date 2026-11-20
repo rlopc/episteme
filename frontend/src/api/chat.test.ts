@@ -54,7 +54,7 @@ describe("streamChat", () => {
   });
 
   it.each([
-    [401, "Run `ivlia web`"],
+    [401, "Run `episteme web`"],
     [500, "status 500"],
   ])("reports status %i", async (status, message) => {
     answer(() => HttpResponse.json({ detail: "x" }, { status }));
@@ -88,7 +88,7 @@ describe("streamChat", () => {
         (async () => {
           for await (const event of streamChat("hi")) events.push(event);
         })(),
-      ).rejects.toThrow("connection to the ivlia server failed");
+      ).rejects.toThrow("connection to the episteme server failed");
     } finally {
       fetch.mockRestore();
     }

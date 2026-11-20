@@ -61,7 +61,7 @@ async function read<T>(
     return await reader.read();
   } catch (error) {
     if (signal?.aborted) throw error;
-    throw new ApiError("The connection to the ivlia server failed.");
+    throw new ApiError("The connection to the episteme server failed.");
   }
 }
 

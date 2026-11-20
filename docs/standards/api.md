@@ -1,11 +1,11 @@
 # API
 
-The HTTP API of `ivlia-server`, in `ivlia.api`. Design: [docs/02](../02-arquitectura-e-interfaces.md) ("Contrato único de la API", "API"). The package around it: [backend.md](backend.md).
+The HTTP API of `episteme-server`, in `episteme.api`. Design: [docs/02](../02-arquitectura-e-interfaces.md) ("Contrato único de la API", "API"). The package around it: [backend.md](backend.md).
 
 ## Contract
 
-- The events streamed by the chat are Pydantic models in `ivlia.contract.events`, a union discriminated on `type`. Phase 0 has `token` (`text`), `end` and `error` (`message`); each slice adds its own.
-- Request and response bodies the clients share also live in `ivlia.contract` (`ChatRequest`, `SessionLink`), because the CLI imports only the contract.
+- The events streamed by the chat are Pydantic models in `episteme.contract.events`, a union discriminated on `type`. Phase 0 has `token` (`text`), `end` and `error` (`message`); each slice adds its own.
+- Request and response bodies the clients share also live in `episteme.contract` (`ChatRequest`, `SessionLink`), because the CLI imports only the contract.
 - Fields with a default, such as `type`, are marked required in the exported schema, because they are always sent (`json_schema_serialization_defaults_required`).
 - Tolerant reader: clients ignore event types they do not know and log them. The contract is considered stable after two consecutive slices without breaking changes, that is, with only optional fields added ([docs/02](../02-arquitectura-e-interfaces.md)).
 
@@ -46,12 +46,12 @@ The chat endpoint only serializes the events of the `Chat` use case: `token` eve
 
 ## Same origin and dev origin
 
-- FastAPI serves the built SPA from the package (`ivlia.api.spa`): `vite build` writes it to `backend/src/ivlia/api/static/` (gitignored). `/assets/*` are its files, known top-level files (the favicon) are served by name, and any other non-API path gets `index.html`. A path never reaches the disk outside that folder (tested with encoded `..`). Unknown `/api` paths are 404.
+- FastAPI serves the built SPA from the package (`episteme.api.spa`): `vite build` writes it to `backend/src/episteme/api/static/` (gitignored). `/assets/*` are its files, known top-level files (the favicon) are served by name, and any other non-API path gets `index.html`. A path never reaches the disk outside that folder (tested with encoded `..`). Unknown `/api` paths are 404.
 - Without a built SPA (dev with Vite, backend tests), FastAPI serves only the API.
 - SPA responses carry a strict `Content-Security-Policy` (`default-src 'self'`, `connect-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, among others): the page cannot reach any other origin. The end-to-end test checks that no request leaves the origin and that no `securitypolicyviolation` event fires. They also carry `X-Content-Type-Options: nosniff` and `Cache-Control: no-cache`, so a cached `index.html` never points at the assets of an older build.
 - Development: Vite (`http://localhost:5173`) proxies `/api` to the API with `changeOrigin: true`. The proxy rewrites only `Host`, to the API's own, which the Host allowlist accepts; `Origin` stays the dev origin, which only the dev installation allows. Adding `localhost:5173` to the Host allowlist instead would widen it for nothing.
 - `dev_origin` must be an origin (`http` or `https`, a host, an optional port, no path); anything else stops the start.
-- `web_origin` (`ivlia.config`): where the browser opens the web. In use, the API itself; in dev, `dev_origin`. One-time links point there, so the session cookie belongs to the origin that uses it; the proxy passes `Set-Cookie` and the relative `303` to `/` unchanged.
+- `web_origin` (`episteme.config`): where the browser opens the web. In use, the API itself; in dev, `dev_origin`. One-time links point there, so the session cookie belongs to the origin that uses it; the proxy passes `Set-Cookie` and the relative `303` to `/` unchanged.
 
 ## Listening and port
 
@@ -77,9 +77,9 @@ The chat endpoint only serializes the events of the `Chat` use case: `token` eve
 
 `api/sessions.py`. The web never sees the token.
 
-- `POST /api/session/link`, with the token, mints a one-time code (256 random bits) valid for 60 seconds and returns its link, on the [web origin](#same-origin-and-dev-origin). `ivlia web` opens it in the browser, and accepts only a link to that origin's `/api/session`.
+- `POST /api/session/link`, with the token, mints a one-time code (256 random bits) valid for 60 seconds and returns its link, on the [web origin](#same-origin-and-dev-origin). `episteme web` opens it in the browser, and accepts only a link to that origin's `/api/session`.
 - `GET /api/session?code=...` exchanges the code, once, for a new session and sets the session cookie: `HttpOnly`, `SameSite=Strict`, `Path=/`, `Max-Age` of 7 days.
-- The cookie is `ivlia_session` in the use installation and `ivlia_session_dev` in dev. Both run on `127.0.0.1` and cookies ignore the port, so one shared name would make each installation overwrite the other's session in the same browser.
+- The cookie is `episteme_session` in the use installation and `episteme_session_dev` in dev. Both run on `127.0.0.1` and cookies ignore the port, so one shared name would make each installation overwrite the other's session in the same browser.
 - No `Secure` attribute: Safari does not keep `Secure` cookies on `http://localhost` (WebKit bug 232088).
 - Sessions live 7 days in server memory, so a restart ends every session. A used, expired or unknown code gets 401.
 - One check accepts the token or the cookie (`Auth.token_or_session`); minting a link accepts only the token.

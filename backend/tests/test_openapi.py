@@ -1,7 +1,7 @@
 from openapi_spec_validator import validate
 from openapi_spec_validator.validation import OpenAPIV32SpecValidator
 
-from ivlia.api.schemas import openapi_document
+from episteme.api.schemas import openapi_document
 
 
 def test_openapi_document_is_valid_3_2() -> None:

@@ -24,7 +24,7 @@ export function ChatThread() {
         <ComposerPrimitive.Root className="flex gap-2 border-t p-4">
           <ComposerPrimitive.Input
             aria-label="Message"
-            placeholder="Ask ivlia"
+            placeholder="Ask episteme"
             className="flex-1 resize-none rounded-lg border bg-background px-3 py-2 text-sm"
           />
           <ComposerPrimitive.Send asChild>

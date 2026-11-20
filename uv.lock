@@ -12,8 +12,8 @@ exclude-newer-span = "P7D"
 
 [manifest]
 members = [
-    "ivlia",
-    "ivlia-workspace",
+    "episteme",
+    "episteme-workspace",
 ]
 
 [[package]]
@@ -449,6 +449,80 @@ wheels = [
 ]
 
 [[package]]
+name = "episteme"
+version = "0.1.2"
+source = { editable = "backend" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "httpx2" },
+    { name = "keyring" },
+    { name = "langgraph" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-sdk" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "structlog" },
+    { name = "typer" },
+    { name = "uvicorn" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "coverage" },
+    { name = "import-linter" },
+    { name = "mypy" },
+    { name = "openapi-spec-validator" },
+    { name = "pytest" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = "==0.162.2" },
+    { name = "httpx2", specifier = "==2.16.0" },
+    { name = "keyring", specifier = "==25.7.0" },
+    { name = "langgraph", specifier = "==1.2.20" },
+    { name = "opentelemetry-api", specifier = "==1.45.2" },
+    { name = "opentelemetry-sdk", specifier = "==1.45.2" },
+    { name = "pydantic", specifier = "==2.14.3" },
+    { name = "pydantic-settings", specifier = "==2.16.2" },
+    { name = "structlog", specifier = "==26.1.0" },
+    { name = "typer", specifier = "==0.27.3" },
+    { name = "uvicorn", specifier = "==0.54.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "coverage", specifier = "==7.17.2" },
+    { name = "import-linter", specifier = "==2.15" },
+    { name = "mypy", specifier = "==2.4.1" },
+    { name = "openapi-spec-validator", specifier = "==0.9.0" },
+    { name = "pytest", specifier = "==9.2.0" },
+    { name = "ruff", specifier = "==0.17.3" },
+]
+
+[[package]]
+name = "episteme-workspace"
+version = "0.0.0"
+source = { virtual = "." }
+
+[package.dev-dependencies]
+dev = [
+    { name = "codespell" },
+    { name = "pre-commit" },
+    { name = "pre-commit-hooks" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "codespell", specifier = "==2.4.3" },
+    { name = "pre-commit", specifier = "==4.7.0" },
+    { name = "pre-commit-hooks", specifier = "==6.0.0" },
+]
+
+[[package]]
 name = "fastapi"
 version = "0.162.2"
 source = { registry = "https://pypi.org/simple" }
@@ -661,80 +735,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/01/e1/2069291243c926a2ff1cd706c7f3eeb9b62144bf60f77c9fb9ff2fb26bd3/iniconfig-2.3.1.tar.gz", hash = "sha256:67f4b9c50da0dedf52af349e7749a80a9057a5031199791b906c3bb3ae878960", size = 21209, upload-time = "2026-10-06T22:48:38.076Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/56/43/4ca9e49d27a1fcf6bece6f6aec0ea46bb9112489b93d4b688fb415457bdb/iniconfig-2.3.1-py3-none-any.whl", hash = "sha256:9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7", size = 7552, upload-time = "2026-10-06T22:48:36.959Z" },
-]
-
-[[package]]
-name = "ivlia"
-version = "0.1.2"
-source = { editable = "backend" }
-dependencies = [
-    { name = "fastapi" },
-    { name = "httpx2" },
-    { name = "keyring" },
-    { name = "langgraph" },
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-sdk" },
-    { name = "pydantic" },
-    { name = "pydantic-settings" },
-    { name = "structlog" },
-    { name = "typer" },
-    { name = "uvicorn" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "coverage" },
-    { name = "import-linter" },
-    { name = "mypy" },
-    { name = "openapi-spec-validator" },
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "fastapi", specifier = "==0.162.2" },
-    { name = "httpx2", specifier = "==2.16.0" },
-    { name = "keyring", specifier = "==25.7.0" },
-    { name = "langgraph", specifier = "==1.2.20" },
-    { name = "opentelemetry-api", specifier = "==1.45.2" },
-    { name = "opentelemetry-sdk", specifier = "==1.45.2" },
-    { name = "pydantic", specifier = "==2.14.3" },
-    { name = "pydantic-settings", specifier = "==2.16.2" },
-    { name = "structlog", specifier = "==26.1.0" },
-    { name = "typer", specifier = "==0.27.3" },
-    { name = "uvicorn", specifier = "==0.54.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "coverage", specifier = "==7.17.2" },
-    { name = "import-linter", specifier = "==2.15" },
-    { name = "mypy", specifier = "==2.4.1" },
-    { name = "openapi-spec-validator", specifier = "==0.9.0" },
-    { name = "pytest", specifier = "==9.2.0" },
-    { name = "ruff", specifier = "==0.17.3" },
-]
-
-[[package]]
-name = "ivlia-workspace"
-version = "0.0.0"
-source = { virtual = "." }
-
-[package.dev-dependencies]
-dev = [
-    { name = "codespell" },
-    { name = "pre-commit" },
-    { name = "pre-commit-hooks" },
-]
-
-[package.metadata]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "codespell", specifier = "==2.4.3" },
-    { name = "pre-commit", specifier = "==4.7.0" },
-    { name = "pre-commit-hooks", specifier = "==6.0.0" },
 ]
 
 [[package]]

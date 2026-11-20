@@ -7,7 +7,7 @@ The standards document describes the current state of the project's tools and pr
 - [repository.md](repository.md): tool versions, `just`, pre-commit, repository files and GitHub settings.
 - [ai-development.md](ai-development.md): Claude Code configuration, Validar, reviewer and OpenSpec.
 - [security.md](security.md): threat model and security measures.
-- [backend.md](backend.md): the Python package: layers, typing, tests, configuration, secrets, migrations, logs and traces, `ivlia-server`.
+- [backend.md](backend.md): the Python package: layers, typing, tests, configuration, secrets, migrations, logs and traces, `episteme-server`.
 - [api.md](api.md): the HTTP API: contract and its export, frontend types and validator, OpenAPI, endpoints, same origin and dev origin, Host and Origin, token, web session.
 - [frontend.md](frontend.md): the SPA: layout and boundaries, lint and types, SSE client, chat, tests, end-to-end and accessibility.
 - [ci.md](ci.md): GitHub Actions workflows, their security rules, required checks and Dependabot.

@@ -1,12 +1,12 @@
-# ivlia · 09 IA en el desarrollo
+# episteme · 09 IA en el desarrollo
 
 Nov 8, 2026 · @rlopc
 
-Claude Code desarrolla ivlia con desarrollo guiado por especificaciones, usando OpenSpec (licencia MIT). Las especificaciones describen el comportamiento del producto. El documento de estándares (descrito en «08 Ingeniería y calidad») describe las herramientas y prácticas. El ciclo de abajo se usa desde la rebanada 2. La fase 0 crea el entorno, incluida la instalación y configuración de OpenSpec, sin ese ciclo.
+Claude Code desarrolla episteme con desarrollo guiado por especificaciones, usando OpenSpec (licencia MIT). Las especificaciones describen el comportamiento del producto. El documento de estándares (descrito en «08 Ingeniería y calidad») describe las herramientas y prácticas. El ciclo de abajo se usa desde la rebanada 2. La fase 0 crea el entorno, incluida la instalación y configuración de OpenSpec, sin ese ciclo.
 
 ## Desarrollo independiente del uso real
 
-ivlia en desarrollo e ivlia en uso son dos instalaciones independientes. Los datos reales del usuario (notas, memoria, secretos) solo existen en la instalación de uso.
+episteme en desarrollo y episteme en uso son dos instalaciones independientes. Los datos reales del usuario (notas, memoria, secretos) solo existen en la instalación de uso.
 
 - Desarrollo: tiene su propia configuración y sus propias bases de datos, y una carpeta de notas de ejemplo (sintéticas o públicas) dentro del repositorio. Los tests y el conjunto de preguntas de referencia usan solo esos datos. El entorno donde corre Claude Code no contiene secretos reales.
 - Uso: la configuración y los datos viven en el Mac, fuera del repositorio, y Claude Code no tiene acceso a ellos.
@@ -44,7 +44,7 @@ Claude Code construye el entorno en pasos pequeños (por ejemplo: repositorio y 
 
 ## Las herramientas de calidad guían a la IA
 
-Las herramientas de «08 Ingeniería y calidad» (ruff, mypy, import-linter, pytest, ESLint, Vitest, etc.) sirven para desarrollar ivlia y son lo que guía a Claude Code: ejecuta las comprobaciones, lee los errores y se corrige solo antes de que el usuario revise.
+Las herramientas de «08 Ingeniería y calidad» (ruff, mypy, import-linter, pytest, ESLint, Vitest, etc.) sirven para desarrollar episteme y son lo que guía a Claude Code: ejecuta las comprobaciones, lee los errores y se corrige solo antes de que el usuario revise.
 
 - Todas se ejecutan a través de `just`, y Claude Code las ejecuta con esos comandos.
 - No hay hook tras cada edición, porque se ejecutaría fuera del sandbox: pre-commit ejecuta las comprobaciones rápidas (formateador y linter) al hacer commit, y Claude puede lanzarlas antes con `uv run --locked pre-commit run --files <ficheros>` ([ai-development.md](standards/ai-development.md#hooks)).

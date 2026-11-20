@@ -1,4 +1,4 @@
-from ivlia.domain.data_policy.levels import DataLevel
+from episteme.domain.data_policy.levels import DataLevel
 
 
 def test_levels_are_ordered_by_sensitivity() -> None:

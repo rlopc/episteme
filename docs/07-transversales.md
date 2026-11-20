@@ -1,12 +1,12 @@
-# ivlia · 07 Transversales
+# episteme · 07 Transversales
 
 Nov 8, 2026 · @rlopc
 
-Aspectos que afectan a todo ivlia.
+Aspectos que afectan a todo episteme.
 
 ## Configuración
 
-Tres capas: los valores por defecto van en el código, los ajustes del usuario en un archivo TOML (fuera del repositorio en la instalación de uso; en desarrollo, en una carpeta del repositorio ignorada por git), y los secretos fuera de ambos. Los secretos se buscan, por orden, en variables de entorno, en el almacén de secretos del sistema (mediante `keyring`) y, si el almacén no está disponible, en un fichero de la carpeta de datos de ivlia legible solo por el usuario. Los secretos que genera ivlia, como el token de la API, se crean solos al primer arranque y se guardan en el almacén o, si no está disponible, en ese fichero. Cada instalación usa un nombre de servicio propio en `keyring`. La instalación de desarrollo nunca usa el almacén del sistema: solo variables de entorno o el fichero de su carpeta de datos. Todo se valida al arrancar. Si algo está mal, ivlia no arranca y dice qué falla.
+Tres capas: los valores por defecto van en el código, los ajustes del usuario en un archivo TOML (fuera del repositorio en la instalación de uso; en desarrollo, en una carpeta del repositorio ignorada por git), y los secretos fuera de ambos. Los secretos se buscan, por orden, en variables de entorno, en el almacén de secretos del sistema (mediante `keyring`) y, si el almacén no está disponible, en un fichero de la carpeta de datos de episteme legible solo por el usuario. Los secretos que genera episteme, como el token de la API, se crean solos al primer arranque y se guardan en el almacén o, si no está disponible, en ese fichero. Cada instalación usa un nombre de servicio propio en `keyring`. La instalación de desarrollo nunca usa el almacén del sistema: solo variables de entorno o el fichero de su carpeta de datos. Todo se valida al arrancar. Si algo está mal, episteme no arranca y dice qué falla.
 
 ## Observabilidad
 
@@ -24,4 +24,4 @@ Los prompts son artefactos versionados en el repositorio, con tests de instantá
 
 ## Copias de seguridad
 
-`ivlia backup` hace una copia consistente de los datos de la instalación en la que se ejecuta y `ivlia restore` la recupera. Un test prueba la restauración con los datos de ejemplo.
+`episteme backup` hace una copia consistente de los datos de la instalación en la que se ejecuta y `episteme restore` la recupera. Un test prueba la restauración con los datos de ejemplo.

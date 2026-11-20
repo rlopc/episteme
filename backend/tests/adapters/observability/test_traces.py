@@ -1,7 +1,7 @@
 import json
 from typing import TYPE_CHECKING
 
-from ivlia.adapters.observability.traces import (
+from episteme.adapters.observability.traces import (
     TRACE_FILE,
     JsonLinesSpanExporter,
     tracer_provider,
@@ -25,7 +25,7 @@ def test_spans_go_to_the_trace_file_as_json_lines(tmp_path: Path) -> None:
     ]
     assert [span["name"] for span in spans] == ["child", "parent"]
     assert spans[0]["context"]["trace_id"] == spans[1]["context"]["trace_id"]
-    assert spans[0]["resource"]["attributes"]["service.name"] == "ivlia"
+    assert spans[0]["resource"]["attributes"]["service.name"] == "episteme"
 
 
 def test_console_export_is_optional(

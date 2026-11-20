@@ -1,4 +1,4 @@
-# Development container for ivlia. Tools come from mise.lock (postCreateCommand);
+# Development container for episteme. Tools come from mise.lock (postCreateCommand);
 # the image only adds what mise cannot install.
 FROM mcr.microsoft.com/devcontainers/base:3-ubuntu26.04
 

@@ -1,10 +1,10 @@
-# ivlia · 04 Conocimiento y memoria
+# episteme · 04 Conocimiento y memoria
 
 Nov 8, 2026 · @rlopc
 
 ## Memoria
 
-La memoria guarda lo que ivlia recuerda del usuario y de sus conversaciones. Es un módulo separado del conocimiento (ver más abajo): la memoria es lo que ivlia aprende sobre el usuario y el conocimiento son las fuentes que el usuario ya tiene.
+La memoria guarda lo que episteme recuerda del usuario y de sus conversaciones. Es un módulo separado del conocimiento (ver más abajo): la memoria es lo que episteme aprende sobre el usuario y el conocimiento son las fuentes que el usuario ya tiene.
 
 ### Qué guarda
 
@@ -17,7 +17,7 @@ Los hechos son globales o de un tema. El tema lo define el usuario.
 
 ### Almacenamiento de la memoria
 
-SQLite propio de ivlia, con el historial, los hechos y el registro de acciones. En la instalación de uso vive fuera del repositorio; en desarrollo, en una carpeta del repositorio ignorada por git.
+SQLite propio de episteme, con el historial, los hechos y el registro de acciones. En la instalación de uso vive fuera del repositorio; en desarrollo, en una carpeta del repositorio ignorada por git.
 
 ### Reglas de guardado
 
@@ -27,13 +27,13 @@ SQLite propio de ivlia, con el historial, los hechos y el registro de acciones. 
 
 ## Conocimiento
 
-El módulo Conocimiento construye y consulta el grafo de conocimiento, y permite que ivlia responda sobre las fuentes del usuario con citas. Es un módulo separado con sus propios puertos. Sus datos viven fuera del repositorio en la instalación de uso, y en una carpeta del repositorio ignorada por git en desarrollo.
+El módulo Conocimiento construye y consulta el grafo de conocimiento, y permite que episteme responda sobre las fuentes del usuario con citas. Es un módulo separado con sus propios puertos. Sus datos viven fuera del repositorio en la instalación de uso, y en una carpeta del repositorio ignorada por git en desarrollo.
 
-El **grafo de conocimiento** es la red que une todo lo que ivlia sabe de las fuentes del usuario. Sus **nodos** son documentos y apartados de las notas, proyectos (solo como referencias) y, más adelante, conceptos. Sus **aristas** son las relaciones entre ellos: enlaces, etiquetas, carpetas y, más adelante, relaciones extraídas con un modelo. Cada nodo y cada arista guardan su fuente y su nivel de datos.
+El **grafo de conocimiento** es la red que une todo lo que episteme sabe de las fuentes del usuario. Sus **nodos** son documentos y apartados de las notas, proyectos (solo como referencias) y, más adelante, conceptos. Sus **aristas** son las relaciones entre ellos: enlaces, etiquetas, carpetas y, más adelante, relaciones extraídas con un modelo. Cada nodo y cada arista guardan su fuente y su nivel de datos.
 
 ### Fuentes
 
-- Notas del usuario: documentos Markdown compatibles con Obsidian, con enlaces wikilink (`[[fichero]]`, `[[fichero#Título]]`, `[[fichero#^id]]`). Los nombres de fichero son únicos en todo el conjunto de notas. Algunos documentos existentes aún usan enlaces Markdown normales mientras se migran, y ivlia lee los dos tipos.
+- Notas del usuario: documentos Markdown compatibles con Obsidian, con enlaces wikilink (`[[fichero]]`, `[[fichero#Título]]`, `[[fichero#^id]]`). Los nombres de fichero son únicos en todo el conjunto de notas. Algunos documentos existentes aún usan enlaces Markdown normales mientras se migran, y episteme lee los dos tipos.
 - Proyectos del usuario: solo una referencia (nombre, ubicación y qué prácticas o herramientas aplica). El detalle no se indexa: se consulta al asistente del proyecto (ver «03 Agentes y herramientas»).
 
 ### Construcción del grafo
@@ -42,13 +42,13 @@ Se construye primero con la estructura que ya existe: enlaces, etiquetas y carpe
 
 ### Extracción de conocimiento
 
-Una tarea de extracción convierte una fuente (un PDF, una web, una transcripción de audio…) en un documento Markdown con wikilinks y lo añade al grafo de conocimiento. Cada tipo de fuente tiene su extractor, detrás del puerto Extractor. El documento generado se escribe en la carpeta propia de ivlia, una subcarpeta dentro de la carpeta de notas, guarda la referencia a la fuente original y hereda su nivel de datos (ver «06 Datos y seguridad»). Se indexa y se cita como cualquier otra nota. Llega después de la primera versión, junto con la extracción de conceptos con un modelo. ivlia no escribe en la carpeta de notas un documento cuyo nivel supere el máximo declarado para esa carpeta (por ejemplo, si se sincroniza con la nube): si lo supera, bloquea la operación y pregunta. Comprueba las colisiones de nombres y nunca sobrescribe un documento que el usuario haya editado.
+Una tarea de extracción convierte una fuente (un PDF, una web, una transcripción de audio…) en un documento Markdown con wikilinks y lo añade al grafo de conocimiento. Cada tipo de fuente tiene su extractor, detrás del puerto Extractor. El documento generado se escribe en la carpeta propia de episteme, una subcarpeta dentro de la carpeta de notas, guarda la referencia a la fuente original y hereda su nivel de datos (ver «06 Datos y seguridad»). Se indexa y se cita como cualquier otra nota. Llega después de la primera versión, junto con la extracción de conceptos con un modelo. episteme no escribe en la carpeta de notas un documento cuyo nivel supere el máximo declarado para esa carpeta (por ejemplo, si se sincroniza con la nube): si lo supera, bloquea la operación y pregunta. Comprueba las colisiones de nombres y nunca sobrescribe un documento que el usuario haya editado.
 
 ### Indexado
 
-- El reindexado es manual (`ivlia reindex`) al principio. El incremental llega después.
-- Cada vector guarda qué modelo de embeddings lo creó. Si el usuario cambia de modelo, ivlia lo detecta, avisa de que el índice está desactualizado y no mezcla vectores de modelos distintos hasta reindexar.
-- ivlia solo escribe en su propia carpeta.
+- El reindexado es manual (`episteme reindex`) al principio. El incremental llega después.
+- Cada vector guarda qué modelo de embeddings lo creó. Si el usuario cambia de modelo, episteme lo detecta, avisa de que el índice está desactualizado y no mezcla vectores de modelos distintos hasta reindexar.
+- episteme solo escribe en su propia carpeta.
 
 ### Búsqueda
 

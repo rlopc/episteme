@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 import pytest
 from keyring.errors import NoKeyringError
 
-from ivlia.config.errors import ConfigError
-from ivlia.config.installation import Environment, Installation
-from ivlia.config.secrets import API_TOKEN, SecretStore, api_token, secret_store
+from episteme.config.errors import ConfigError
+from episteme.config.installation import Environment, Installation
+from episteme.config.secrets import API_TOKEN, SecretStore, api_token, secret_store
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-SERVICE = "ivlia-test"
+SERVICE = "episteme-test"
 
 
 class _MemoryKeyring:
@@ -42,7 +42,7 @@ def test_environment_wins_over_keyring_and_file(tmp_path: Path) -> None:
     backend = _MemoryKeyring()
     backend.set_password(SERVICE, API_TOKEN, "from-keyring")
     store = SecretStore(
-        tmp_path, SERVICE, backend, environ={"IVLIA_API_TOKEN": "from-env"}
+        tmp_path, SERVICE, backend, environ={"EPISTEME_API_TOKEN": "from-env"}
     )
 
     token = store.get(API_TOKEN)
@@ -114,7 +114,7 @@ def test_secret_value_is_hidden_in_repr(tmp_path: Path) -> None:
 @pytest.fixture
 def system_keyring(monkeypatch: pytest.MonkeyPatch) -> _MemoryKeyring:
     backend = _MemoryKeyring()
-    monkeypatch.setattr("ivlia.config.secrets.keyring.get_keyring", lambda: backend)
+    monkeypatch.setattr("episteme.config.secrets.keyring.get_keyring", lambda: backend)
     return backend
 
 
@@ -146,7 +146,7 @@ def test_failed_write_leaves_no_partial_file(
     def broken_dump(*_args: object, **_kwargs: object) -> None:
         raise OSError
 
-    monkeypatch.setattr("ivlia.config.secrets.json.dump", broken_dump)
+    monkeypatch.setattr("episteme.config.secrets.json.dump", broken_dump)
     store = SecretStore(tmp_path, SERVICE, None, environ={})
 
     with pytest.raises(OSError):  # noqa: PT011 (any write error)

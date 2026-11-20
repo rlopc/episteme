@@ -9,8 +9,10 @@ import { defineConfig, devices } from "@playwright/test";
 // worker: the values are set once and the workers inherit them.
 const port = 8767;
 const origin = `http://127.0.0.1:${String(port)}`;
-process.env.IVLIA_E2E_TOKEN ??= randomBytes(32).toString("base64url");
-process.env.IVLIA_E2E_HOME ??= mkdtempSync(path.join(tmpdir(), "ivlia-e2e-"));
+process.env.EPISTEME_E2E_TOKEN ??= randomBytes(32).toString("base64url");
+process.env.EPISTEME_E2E_HOME ??= mkdtempSync(
+  path.join(tmpdir(), "episteme-e2e-"),
+);
 
 export default defineConfig({
   testDir: "e2e",
@@ -19,16 +21,16 @@ export default defineConfig({
   use: { baseURL: origin, trace: "retain-on-failure" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "uv run --locked --project ../backend ivlia-server",
+    command: "uv run --locked --project ../backend episteme-server",
     url: `${origin}/api/health`,
     reuseExistingServer: false,
     env: {
-      IVLIA_ENV: "dev",
-      IVLIA_HOME: process.env.IVLIA_E2E_HOME,
-      IVLIA_PORT: String(port),
-      IVLIA_API_TOKEN: process.env.IVLIA_E2E_TOKEN,
+      EPISTEME_ENV: "dev",
+      EPISTEME_HOME: process.env.EPISTEME_E2E_HOME,
+      EPISTEME_PORT: String(port),
+      EPISTEME_API_TOKEN: process.env.EPISTEME_E2E_TOKEN,
       // One-time links point at the web origin: here, the server itself.
-      IVLIA_DEV_ORIGIN: origin,
+      EPISTEME_DEV_ORIGIN: origin,
     },
   },
 });

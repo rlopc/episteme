@@ -1,4 +1,4 @@
-# ivlia · 03 Agentes y herramientas
+# episteme · 03 Agentes y herramientas
 
 Nov 8, 2026 · @rlopc
 
@@ -56,4 +56,4 @@ Las herramientas son las acciones que un agente puede ejecutar: leer archivos, b
 
 ### Asistentes de proyecto
 
-Cada proyecto del usuario tiene su propio asistente de desarrollo. ivlia se conecta a él mediante el puerto Tool (por ejemplo, con su adaptador MCP) para consultarle sobre su proyecto y para proponerle acciones. Consultar no necesita confirmación si el asistente de proyecto se conecta en un modo de solo lectura que él mismo garantiza; si no lo garantiza, consultar también la necesita. Sus respuestas son datos no fiables, como cualquier resultado de herramienta. Proponer o enviar una acción necesita la confirmación del usuario. Cada asistente de proyecto declara el nivel de datos máximo que puede recibir, y ivlia bloquea la operación y pregunta si el mensaje lo supera (ver «06 Datos y seguridad»).
+Cada proyecto del usuario tiene su propio asistente de desarrollo. episteme se conecta a él mediante el puerto Tool (por ejemplo, con su adaptador MCP) para consultarle sobre su proyecto y para proponerle acciones. Consultar no necesita confirmación si el asistente de proyecto se conecta en un modo de solo lectura que él mismo garantiza; si no lo garantiza, consultar también la necesita. Sus respuestas son datos no fiables, como cualquier resultado de herramienta. Proponer o enviar una acción necesita la confirmación del usuario. Cada asistente de proyecto declara el nivel de datos máximo que puede recibir, y episteme bloquea la operación y pregunta si el mensaje lo supera (ver «06 Datos y seguridad»).

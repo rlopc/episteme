@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const apiPort = process.env.IVLIA_PORT ?? "8766";
+const apiPort = process.env.EPISTEME_PORT ?? "8766";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -23,10 +23,10 @@ export default defineConfig({
     },
   },
   build: {
-    // FastAPI serves the built SPA from the package (ivlia.api.spa).
+    // FastAPI serves the built SPA from the package (episteme.api.spa).
     outDir: path.resolve(
       import.meta.dirname,
-      "../backend/src/ivlia/api/static",
+      "../backend/src/episteme/api/static",
     ),
     emptyOutDir: true,
   },

@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 import pytest
 from api_client import AUTH, TOKEN, make_client
 
-from ivlia.adapters.hello_world_llm import REPLY_CHUNKS
-from ivlia.config.installation import Environment
+from episteme.adapters.hello_world_llm import REPLY_CHUNKS
+from episteme.config.installation import Environment
 
 if TYPE_CHECKING:
     from fastapi.testclient import TestClient

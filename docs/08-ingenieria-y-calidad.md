@@ -1,4 +1,4 @@
-# ivlia · 08 Ingeniería y calidad
+# episteme · 08 Ingeniería y calidad
 
 Nov 8, 2026 · @rlopc
 
@@ -50,13 +50,13 @@ mypy en modo estricto, provisional (ver «mypy o ty» en «10 Plan y pendientes�
 
 ## Entrega
 
-ivlia puede estar en uso y en desarrollo a la vez. Cada versión nueva debe poder seguir usando lo generado con las anteriores.
+episteme puede estar en uso y en desarrollo a la vez. Cada versión nueva debe poder seguir usando lo generado con las anteriores.
 
 - Una sola versión para todo el repositorio, con SemVer. La versión y el CHANGELOG se generan a partir de los Conventional Commits.
 - La instalación de uso solo instala versiones etiquetadas, nunca `main`.
 - Los datos originales (memoria, historial, registro de acciones, documentos extraídos y configuración del usuario) se migran. Cada cambio de formato incluye su migración, solo hacia delante, y un test la aplica sobre datos creados con la versión anterior. El registro de acciones conserva su cadena de hashes verificable.
-- Los datos derivados de las notas (índice, vectores y grafo) se regeneran con `ivlia reindex` en vez de migrarse. Los checkpoints se descartan.
-- Al arrancar con migraciones pendientes, el servidor hace primero una copia (el mismo caso de uso que `ivlia backup`) y después las aplica. Si una migración falla, ivlia no arranca y dice qué falla.
+- Los datos derivados de las notas (índice, vectores y grafo) se regeneran con `episteme reindex` en vez de migrarse. Los checkpoints se descartan.
+- Al arrancar con migraciones pendientes, el servidor hace primero una copia (el mismo caso de uso que `episteme backup`) y después las aplica. Si una migración falla, episteme no arranca y dice qué falla.
 - Volver atrás es instalar la versión anterior y restaurar la copia. Lo generado después de la copia se pierde.
 
 ## Documentación en tres capas

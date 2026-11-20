@@ -110,7 +110,7 @@
       "Edit(~/.claude/settings.json)",
       "Read(~/.claude/.credentials.json)",
       "Read(~/.claude/github-mcp-token)",
-      "Read(~/Library/Application Support/ivlia/**)",
+      "Read(~/Library/Application Support/episteme/**)",
       "Read(~/.ssh/**)",
       "Read(~/.gnupg/**)",
       "Read(~/.aws/**)",
@@ -126,7 +126,7 @@
       "denyRead": [
         "~/.claude/.credentials.json",
         "~/.claude/github-mcp-token",
-        "~/Library/Application Support/ivlia",
+        "~/Library/Application Support/episteme",
         "~/.ssh",
         "~/.gnupg",
         "~/.aws",

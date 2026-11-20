@@ -1,5 +1,5 @@
 {
-  "name": "ivlia",
+  "name": "episteme",
   "build": { "dockerfile": "Dockerfile" },
   "remoteUser": "vscode",
 
@@ -7,9 +7,9 @@
   // Linux binaries never reach the host folder.
   "mounts": [
     "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-    "source=ivlia-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/node_modules,type=volume",
-    "source=ivlia-frontend-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
-    "source=ivlia-venv-${devcontainerId},target=${containerWorkspaceFolder}/.venv,type=volume",
+    "source=episteme-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=episteme-frontend-node-modules-${devcontainerId},target=${containerWorkspaceFolder}/frontend/node_modules,type=volume",
+    "source=episteme-venv-${devcontainerId},target=${containerWorkspaceFolder}/.venv,type=volume",
     // Read-only inside: the host runs devcontainer.json (initializeCommand) and
     // VS Code applies .vscode/, so nothing in the container may change them.
     // Edit them on the host.

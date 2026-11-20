@@ -100,7 +100,7 @@ jobs:
           mise exec -- uv lock
           # The backend half of `just contract`; the frontend's contract
           # does not depend on the version.
-          (cd backend && mise exec -- uv run --locked python -m ivlia.api.schemas schemas)
+          (cd backend && mise exec -- uv run --locked python -m episteme.api.schemas schemas)
           if git diff --quiet -- uv.lock backend/schemas; then
             exit 0
           fi
@@ -140,7 +140,7 @@ jobs:
         run: |
           mise install --locked node pnpm uv
           mise exec -- pnpm install --frozen-lockfile
-          mise exec -- pnpm --filter ivlia-frontend run build
+          mise exec -- pnpm --filter episteme-frontend run build
           mise exec -- uv build backend --wheel --out-dir dist
       - id: attest
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2

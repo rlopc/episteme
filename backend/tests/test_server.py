@@ -4,11 +4,11 @@ from typing import Any
 import pytest
 from fastapi import FastAPI
 
-from ivlia import server
-from ivlia.bootstrap import Server
-from ivlia.config.errors import ConfigError
-from ivlia.config.installation import Environment, Installation
-from ivlia.config.settings import Config, Settings
+from episteme import server
+from episteme.bootstrap import Server
+from episteme.config.errors import ConfigError
+from episteme.config.installation import Environment, Installation
+from episteme.config.settings import Config, Settings
 
 
 def _server(env: Environment) -> Server:
@@ -23,7 +23,7 @@ def _server(env: Environment) -> Server:
 def runs(monkeypatch: pytest.MonkeyPatch) -> list[dict[str, Any]]:
     calls: list[dict[str, Any]] = []
     monkeypatch.setattr(
-        "ivlia.server.uvicorn.run",
+        "episteme.server.uvicorn.run",
         lambda target, **kwargs: calls.append({"target": target, **kwargs}),
     )
     return calls
@@ -54,14 +54,14 @@ def test_serves_only_on_localhost_without_access_log(
 def test_reload_uses_the_factory_in_dev(
     monkeypatch: pytest.MonkeyPatch, runs: list[dict[str, Any]], tmp_path: Path
 ) -> None:
-    monkeypatch.setenv("IVLIA_ENV", "dev")
-    monkeypatch.setenv("IVLIA_HOME", str(tmp_path))
+    monkeypatch.setenv("EPISTEME_ENV", "dev")
+    monkeypatch.setenv("EPISTEME_HOME", str(tmp_path))
     _build(monkeypatch, Environment.DEV)
 
     assert server.main(["--reload"]) == 0
 
     [run] = runs
-    assert run["target"] == "ivlia.bootstrap:app_factory"
+    assert run["target"] == "episteme.bootstrap:app_factory"
     assert run["factory"] is True
     assert run["port"] == 8766
 
@@ -96,4 +96,4 @@ def test_startup_error_is_shown_and_does_not_start(
 
     assert server.main([]) == 1
     assert runs == []
-    assert capsys.readouterr().err == "ivlia-server: port: bad value\n"
+    assert capsys.readouterr().err == "episteme-server: port: bad value\n"

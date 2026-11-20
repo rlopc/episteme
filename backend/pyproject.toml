@@ -1,5 +1,5 @@
 [project]
-name = "ivlia"
+name = "episteme"
 version = "0.1.2"
 description = "Personal learning platform: backend, API and CLI."
 requires-python = ">=3.14"
@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 [project.scripts]
-ivlia = "ivlia.cli.app:main"
-ivlia-server = "ivlia.server:main"
+episteme = "episteme.cli.app:main"
+episteme-server = "episteme.server:main"
 
 [dependency-groups]
 dev = [
@@ -88,7 +88,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 branch = true
-source = ["ivlia"]
+source = ["episteme"]
 
 [tool.coverage.report]
 # Thresholds, include and omit are per report, on the command line (justfile).
@@ -98,26 +98,26 @@ skip_covered = true
 exclude_also = ["if __name__ == .__main__.:", "assert_never\\("]
 
 [tool.importlinter]
-root_packages = ["ivlia"]
+root_packages = ["episteme"]
 include_external_packages = true
 
 [[tool.importlinter.contracts]]
 name = "Dependencies point inwards"
 type = "layers"
 layers = [
-    "ivlia.server",
-    "ivlia.bootstrap",
-    "ivlia.api | ivlia.adapters | ivlia.cli",
-    "ivlia.application",
-    "ivlia.config",
-    "ivlia.contract",
-    "ivlia.domain",
+    "episteme.server",
+    "episteme.bootstrap",
+    "episteme.api | episteme.adapters | episteme.cli",
+    "episteme.application",
+    "episteme.config",
+    "episteme.contract",
+    "episteme.domain",
 ]
 
 [[tool.importlinter.contracts]]
 name = "The domain imports no framework"
 type = "forbidden"
-source_modules = ["ivlia.domain"]
+source_modules = ["episteme.domain"]
 forbidden_modules = [
     "fastapi", "keyring", "langchain_core", "langgraph", "langsmith", "opentelemetry",
     "pydantic", "pydantic_settings", "starlette", "structlog", "typer", "uvicorn",
@@ -126,34 +126,34 @@ forbidden_modules = [
 [[tool.importlinter.contracts]]
 name = "Only bootstrap imports adapters"
 type = "forbidden"
-source_modules = ["ivlia.server"]
-forbidden_modules = ["ivlia.adapters"]
+source_modules = ["episteme.server"]
+forbidden_modules = ["episteme.adapters"]
 # The server reaches adapters only through bootstrap.
 allow_indirect_imports = true
 
 [[tool.importlinter.contracts]]
 name = "LangGraph and LangSmith stay in application.orchestration"
 type = "forbidden"
-source_modules = ["ivlia"]
+source_modules = ["episteme"]
 forbidden_modules = ["langgraph", "langsmith", "langchain_core"]
 # Whoever calls orchestration reaches LangGraph through it: that is allowed.
 allow_indirect_imports = true
 ignore_imports = [
-    "ivlia.application.orchestration.** -> langgraph",
-    "ivlia.application.orchestration.** -> langsmith",
+    "episteme.application.orchestration.** -> langgraph",
+    "episteme.application.orchestration.** -> langsmith",
 ]
 
 [[tool.importlinter.contracts]]
-name = "The CLI uses ivlia only through the API"
+name = "The CLI uses episteme only through the API"
 type = "forbidden"
-source_modules = ["ivlia.cli"]
+source_modules = ["episteme.cli"]
 # Allowed: contract, config and application.maintenance.
-forbidden_modules = ["ivlia.application", "ivlia.domain"]
+forbidden_modules = ["episteme.application", "episteme.domain"]
 # The contract and config may reach the domain: only direct imports count.
 allow_indirect_imports = true
 ignore_imports = [
-    "ivlia.cli.** -> ivlia.application.maintenance",
-    "ivlia.cli.** -> ivlia.application.maintenance.**",
+    "episteme.cli.** -> episteme.application.maintenance",
+    "episteme.cli.** -> episteme.application.maintenance.**",
 ]
 # The CLI may not use maintenance yet, so the exception may match nothing.
 unmatched_ignore_imports_alerting = "none"
@@ -161,7 +161,7 @@ unmatched_ignore_imports_alerting = "none"
 [[tool.importlinter.contracts]]
 name = "Only the CLI client imports httpx2"
 type = "forbidden"
-source_modules = ["ivlia"]
+source_modules = ["episteme"]
 forbidden_modules = ["httpx2"]
 allow_indirect_imports = true
-ignore_imports = ["ivlia.cli.client -> httpx2"]
+ignore_imports = ["episteme.cli.client -> httpx2"]

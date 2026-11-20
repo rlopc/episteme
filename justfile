@@ -5,8 +5,8 @@ set ignore-comments := true
 
 # Every recipe runs against the dev installation, never the real data.
 # mise.toml sets the same; repeated here so it holds however just is started.
-export IVLIA_ENV := "dev"
-export IVLIA_HOME := justfile_directory() / ".dev"
+export EPISTEME_ENV := "dev"
+export EPISTEME_HOME := justfile_directory() / ".dev"
 
 # OpenSpec telemetry is off: nothing leaves the machine without a reason.
 export OPENSPEC_TELEMETRY := "0"
@@ -20,7 +20,7 @@ default:
 setup:
     mise install --locked
     pnpm install --frozen-lockfile
-    pnpm --filter ivlia-frontend exec playwright install chromium
+    pnpm --filter episteme-frontend exec playwright install chromium
     # Every workspace member and dev group; a plain `uv sync` installs only one part.
     uv sync --locked --all-packages
     uv run --locked pre-commit install
@@ -48,8 +48,8 @@ check-backend:
     uv run --locked lint-imports
     uv run --locked coverage erase
     uv run --locked coverage run -m pytest
-    uv run --locked coverage report --include='src/ivlia/domain/*' --fail-under=100
-    uv run --locked coverage report --omit='src/ivlia/domain/*' --fail-under=95
+    uv run --locked coverage report --include='src/episteme/domain/*' --fail-under=100
+    uv run --locked coverage report --omit='src/episteme/domain/*' --fail-under=95
 
 # Frontend checks. ESLint and Prettier run as pre-commit hooks in `check`.
 [working-directory: 'frontend']
@@ -63,20 +63,20 @@ check-frontend:
 # Run the API of the dev installation with reload.
 [working-directory: 'backend']
 dev:
-    uv run --locked ivlia-server --reload
+    uv run --locked episteme-server --reload
 
-# Run the API and the Vite dev server together; `ivlia web` opens Vite.
+# Run the API and the Vite dev server together; `episteme web` opens Vite.
 dev-web:
     #!/usr/bin/env bash
     set -euo pipefail
     trap 'kill 0' EXIT
-    (cd backend && uv run --locked ivlia-server --reload) &
-    pnpm --filter ivlia-frontend run dev
+    (cd backend && uv run --locked episteme-server --reload) &
+    pnpm --filter episteme-frontend run dev
 
 # Export the contract and OpenAPI to backend/schemas/, then generate frontend/src/contract/.
 contract:
-    cd backend && uv run --locked python -m ivlia.api.schemas schemas
-    pnpm --filter ivlia-frontend run contract
+    cd backend && uv run --locked python -m episteme.api.schemas schemas
+    pnpm --filter episteme-frontend run contract
 
 # Upgrade the tools in mise.toml to their newest release at least 7 days old, and mise.lock. Uses the network.
 update-tools:

@@ -6,14 +6,14 @@ import pytest
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 
-from ivlia.adapters.observability.logs import LOG_FILE, REMOVED, configure_logging
+from episteme.adapters.observability.logs import LOG_FILE, REMOVED, configure_logging
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
 
 MESSAGE_CONTENT = "my private note"  # fake conversation content
-logger = logging.getLogger("ivlia.test")
+logger = logging.getLogger("episteme.test")
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def test_records_are_json_lines_with_metadata(log_file: Path) -> None:
     [line] = _lines(log_file)
     assert line["event"] == "reply sent"
     assert line["level"] == "info"
-    assert line["logger"] == "ivlia.test"
+    assert line["logger"] == "episteme.test"
     assert line["duration_ms"] == 12
     assert "timestamp" in line
     assert "color_message" not in line

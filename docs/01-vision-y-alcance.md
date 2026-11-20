@@ -1,13 +1,13 @@
-# ivlia · 01 Visión y alcance
+# episteme · 01 Visión y alcance
 
 Nov 8, 2026 · @rlopc
 
-ivlia es un asistente personal de IA para gestionar conocimiento de cualquier tipo. Se ejecuta 100 % en local, en el Mac del usuario (Apple M2 Max, 64 GB).
+episteme es un asistente personal de IA para gestionar conocimiento de cualquier tipo. Se ejecuta 100 % en local, en el Mac del usuario (Apple M2 Max, 64 GB).
 
 ## Objetivos
 
 - Un único asistente que gestiona el conocimiento del usuario (notas, documentos y otras fuentes) y responde citando de dónde sale cada respuesta.
-- Los proyectos del usuario tienen su propio asistente de desarrollo. ivlia guarda de cada proyecto una referencia y, cuando hace falta, habla con ese asistente.
+- Los proyectos del usuario tienen su propio asistente de desarrollo. episteme guarda de cada proyecto una referencia y, cuando hace falta, habla con ese asistente.
 - Privacidad alta: los datos no salen del equipo salvo decisión explícita, y una política de niveles lo controla.
 - Modularidad: cualquier componente (modelo, base de datos, interfaz) puede cambiar de origen (local, red local o nube) sin afectar al resto.
 - Calidad de producción desde el primer día, aunque el proyecto sea pequeño, para practicar desde el principio las prácticas de un proyecto grande.
@@ -31,7 +31,7 @@ ivlia es un asistente personal de IA para gestionar conocimiento de cualquier ti
 
 ## Datos del proyecto
 
-- Nombre: ivlia.
+- Nombre: episteme.
 - Licencia: AGPL-3.0-or-later.
 - Repositorio: GitHub, público.
 - Idioma del código, la documentación del repositorio y los commits: inglés.
@@ -40,7 +40,7 @@ ivlia es un asistente personal de IA para gestionar conocimiento de cualquier ti
 
 - ADR: registro de una decisión de arquitectura difícil de revertir, numerado y que no se modifica.
 - Almacén de secretos: servicio del sistema operativo que guarda claves y contraseñas cifradas (el Llavero en macOS).
-- Asistente de proyecto: asistente de desarrollo propio de cada proyecto del usuario, con el que ivlia se comunica (ver «03 Agentes y herramientas»).
+- Asistente de proyecto: asistente de desarrollo propio de cada proyecto del usuario, con el que episteme se comunica (ver «03 Agentes y herramientas»).
 - Cadena de hashes: registro en el que cada entrada incluye un resumen criptográfico (hash) de la anterior, de modo que cambiar una entrada rompe la cadena y se detecta.
 - Checkpoint: copia del estado de una ejecución de LangGraph que permite pausarla y reanudarla.
 - CI (integración continua): sistema que ejecuta automáticamente las comprobaciones en cada cambio.

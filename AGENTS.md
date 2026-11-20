@@ -1,4 +1,4 @@
-# ivlia
+# episteme
 
 100 % local personal AI assistant to manage knowledge of any type (Apple M2 Max, 64 GB). It is designed and will be built here with Claude Code, in small slices the user can supervise, with production-level practices from day one.
 

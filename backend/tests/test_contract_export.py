@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from ivlia.api.schemas import exports, main
+from episteme.api.schemas import exports, main
 
 SCHEMAS_DIR = Path(__file__).parent.parent / "schemas"
 

@@ -1,6 +1,6 @@
 # Release
 
-How ivlia is versioned, released and installed. Design: [docs/08](../08-ingenieria-y-calidad.md) ("Entrega"). The workflow: [.github/workflows/release.yml](../../.github/workflows/release.yml).
+How episteme is versioned, released and installed. Design: [docs/08](../08-ingenieria-y-calidad.md) ("Entrega"). The workflow: [.github/workflows/release.yml](../../.github/workflows/release.yml).
 
 ## Versioning and CHANGELOG
 
@@ -26,8 +26,8 @@ On every push to `main`:
 
 ## Build
 
-- Build backend `uv_build`. It packs everything under `backend/src/ivlia/`, including the built SPA in `api/static/`, which git ignores: the backend does not read `.gitignore` (checked by building the wheel, 2026-11-10).
-- Only a wheel is built (`uv build backend --wheel`), after `pnpm --filter ivlia-frontend run build`. An sdist would not contain the built SPA.
+- Build backend `uv_build`. It packs everything under `backend/src/episteme/`, including the built SPA in `api/static/`, which git ignores: the backend does not read `.gitignore` (checked by building the wheel, 2026-11-10).
+- Only a wheel is built (`uv build backend --wheel`), after `pnpm --filter episteme-frontend run build`. An sdist would not contain the built SPA.
 - No public registry: the wheel lives only in the GitHub release.
 
 ## Provenance
@@ -40,13 +40,13 @@ On every push to `main`:
 Only tagged releases are installed for use, never `main`.
 
 ```sh
-gh release download vX.Y.Z --repo rlopc/ivlia --pattern '*.whl*'
-gh attestation verify ivlia-X.Y.Z-py3-none-any.whl --repo rlopc/ivlia \
-  --signer-workflow rlopc/ivlia/.github/workflows/release.yml
-uv tool install ./ivlia-X.Y.Z-py3-none-any.whl
+gh release download vX.Y.Z --repo rlopc/episteme --pattern '*.whl*'
+gh attestation verify episteme-X.Y.Z-py3-none-any.whl --repo rlopc/episteme \
+  --signer-workflow rlopc/episteme/.github/workflows/release.yml
+uv tool install ./episteme-X.Y.Z-py3-none-any.whl
 ```
 
-- `gh attestation verify` checks that the wheel's digest matches an attestation made by this repository's release workflow (`--signer-workflow`). Offline: add `--bundle ivlia-X.Y.Z-py3-none-any.whl.sigstore.json`.
-- `uv tool install` exposes `ivlia` and `ivlia-server`. Installed from a wheel, PEP 610 records `archive_info`, so it starts as the use installation ([backend.md](backend.md#configuration)).
-- To try a release without touching `~/.local`, the real installation or the system keychain, set `UV_TOOL_DIR` and `UV_TOOL_BIN_DIR` to a folder inside `.dev/`, `IVLIA_HOME` to a temporary folder and `IVLIA_ENV=dev`, which never uses the keychain.
+- `gh attestation verify` checks that the wheel's digest matches an attestation made by this repository's release workflow (`--signer-workflow`). Offline: add `--bundle episteme-X.Y.Z-py3-none-any.whl.sigstore.json`.
+- `uv tool install` exposes `episteme` and `episteme-server`. Installed from a wheel, PEP 610 records `archive_info`, so it starts as the use installation ([backend.md](backend.md#configuration)).
+- To try a release without touching `~/.local`, the real installation or the system keychain, set `UV_TOOL_DIR` and `UV_TOOL_BIN_DIR` to a folder inside `.dev/`, `EPISTEME_HOME` to a temporary folder and `EPISTEME_ENV=dev`, which never uses the keychain.
 - The release is created by release-please and then gets its assets. If GitHub's immutable releases are turned on, uploading to a published release fails: `publish` would then need release-please to create a draft and publish it at the end.

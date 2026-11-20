@@ -47,7 +47,7 @@ describe("chat page", () => {
     renderApp();
     await send("hello");
     expect((await screen.findByRole("alert")).textContent).toContain(
-      "Run `ivlia web`",
+      "Run `episteme web`",
     );
   });
 

@@ -1,8 +1,8 @@
-# ivlia · 02 Arquitectura e interfaces
+# episteme · 02 Arquitectura e interfaces
 
 Nov 8, 2026 · @rlopc
 
-ivlia combina Clean Architecture y arquitectura hexagonal: el dominio y los casos de uso no dependen de ninguna tecnología concreta, y todo lo que está fuera (modelos, bases de datos, interfaces, herramientas) se conecta mediante puertos.
+episteme combina Clean Architecture y arquitectura hexagonal: el dominio y los casos de uso no dependen de ninguna tecnología concreta, y todo lo que está fuera (modelos, bases de datos, interfaces, herramientas) se conecta mediante puertos.
 
 ## Arquitectura
 
@@ -11,11 +11,11 @@ ivlia combina Clean Architecture y arquitectura hexagonal: el dominio y los caso
 - Abstracción solo en fronteras reales: existe una lista cerrada de puertos y lo que no esté en ella es código concreto. Puertos: LLM, Embedder, Reranker, VectorStore, GraphStore, Tool, Memory, Approval, Transcript y Extractor. La lista se amplía, con un ADR, cuando llegue la voz (texto a voz y reconocimiento de fonemas).
 - Cada puerto tiene tests de contrato que cualquier adaptador debe pasar.
 - Las dependencias van siempre hacia dentro: los adaptadores dependen de la aplicación, la aplicación del dominio, y el dominio no depende de ninguna otra capa ni tecnología. Lo comprueba una herramienta en CI (import-linter en Python, eslint-plugin-boundaries en TypeScript).
-- El desarrollo de ivlia es independiente de su ejecución real: no comparten configuración ni datos (ver «09 IA en el desarrollo»).
+- El desarrollo de episteme es independiente de su ejecución real: no comparten configuración ni datos (ver «09 IA en el desarrollo»).
 
 ### Estructura del repositorio (monorepo)
 
-- `backend/`: paquete Python `ivlia`, con FastAPI (REST y SSE). Contiene el dominio, la aplicación, los adaptadores y la CLI (subpaquete `ivlia.cli`), que se distribuyen juntos.
+- `backend/`: paquete Python `episteme`, con FastAPI (REST y SSE). Contiene el dominio, la aplicación, los adaptadores y la CLI (subpaquete `episteme.cli`), que se distribuyen juntos.
 - `frontend/`: web en React, Vite y TypeScript, como SPA.
 - `docs/`: documentación del proyecto.
 - `openspec/`: especificaciones vigentes y cambios propuestos (ver «09 IA en el desarrollo»).
@@ -31,23 +31,23 @@ LangGraph es el framework de orquestación de agentes y forma parte de la capa d
 
 ## Interfaces
 
-La CLI y la web son clientes de la misma API de ivlia. Hay un único camino de entrada, con los mismos permisos y la misma política de datos, salvo los comandos de mantenimiento de la CLI (ver «CLI»). Añadir otra interfaz más adelante, como la voz, no toca el núcleo.
+La CLI y la web son clientes de la misma API de episteme. Hay un único camino de entrada, con los mismos permisos y la misma política de datos, salvo los comandos de mantenimiento de la CLI (ver «CLI»). Añadir otra interfaz más adelante, como la voz, no toca el núcleo.
 
 ### API
 
-- Escucha solo en el Mac del usuario (localhost) y exige un token local. El token lo genera ivlia al primer arranque y se guarda como cualquier otro secreto (ver «07 Transversales»). Abrirla a la red local exigiría autenticación real.
-- La CLI envía el token en una cabecera. La web no llega a verlo: `ivlia web` abre el navegador con un enlace de un solo uso, que la API canjea por una cookie de sesión `HttpOnly` y `SameSite=Strict`. Las dos formas pasan por la misma comprobación. La API rechaza las peticiones cuyo `Host` u `Origin` no sean los suyos, para impedir el DNS rebinding.
-- El servidor se arranca con `ivlia-server`, tanto en desarrollo como en la instalación de uso.
+- Escucha solo en el Mac del usuario (localhost) y exige un token local. El token lo genera episteme al primer arranque y se guarda como cualquier otro secreto (ver «07 Transversales»). Abrirla a la red local exigiría autenticación real.
+- La CLI envía el token en una cabecera. La web no llega a verlo: `episteme web` abre el navegador con un enlace de un solo uso, que la API canjea por una cookie de sesión `HttpOnly` y `SameSite=Strict`. Las dos formas pasan por la misma comprobación. La API rechaza las peticiones cuyo `Host` u `Origin` no sean los suyos, para impedir el DNS rebinding.
+- El servidor se arranca con `episteme-server`, tanto en desarrollo como en la instalación de uso.
 - El contrato de eventos (ver «Contrato único de la API», arriba) se considera estable tras dos rebanadas consecutivas sin cambios que rompan compatibilidad (solo se añaden campos opcionales). Un test de compatibilidad lo verifica con ejemplos de la versión anterior.
 
 ### CLI
 
-Usa la API para todo salvo `ivlia backup` e `ivlia restore`, que llaman al caso de uso `application/maintenance` y actúan sobre los ficheros locales con los permisos del usuario del sistema. `ivlia backup` hace una copia en caliente consistente; `ivlia restore` exige el servidor parado y lo comprueba con un fichero de bloqueo. Una regla de import-linter limita `ivlia.cli` a importar el contrato, la configuración y `application/maintenance`.
+Usa la API para todo salvo `episteme backup` y `episteme restore`, que llaman al caso de uso `application/maintenance` y actúan sobre los ficheros locales con los permisos del usuario del sistema. `episteme backup` hace una copia en caliente consistente; `episteme restore` exige el servidor parado y lo comprueba con un fichero de bloqueo. Una regla de import-linter limita `episteme.cli` a importar el contrato, la configuración y `application/maintenance`.
 
 Tiene dos modos:
 
-- Chat interactivo: `ivlia chat`.
-- Comandos sueltos, que sirven en scripts: `ivlia ask "..."`, `ivlia web`, `ivlia reindex`, `ivlia memory list`. La administración (reindexar, ver el registro) vive en estos comandos y no en el chat.
+- Chat interactivo: `episteme chat`.
+- Comandos sueltos, que sirven en scripts: `episteme ask "..."`, `episteme web`, `episteme reindex`, `episteme memory list`. La administración (reindexar, ver el registro) vive en estos comandos y no en el chat.
 
 ### Web
 
