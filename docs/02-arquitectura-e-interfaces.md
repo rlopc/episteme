@@ -42,7 +42,7 @@ La CLI y la web son clientes de la misma API de episteme. Hay un único camino d
 
 ### CLI
 
-Usa la API para todo salvo `episteme backup` e `episteme restore`, que llaman al caso de uso `application/maintenance` y actúan sobre los ficheros locales con los permisos del usuario del sistema. `episteme backup` hace una copia en caliente consistente; `episteme restore` exige el servidor parado y lo comprueba con un fichero de bloqueo. Una regla de import-linter limita `episteme.cli` a importar el contrato, la configuración y `application/maintenance`.
+Usa la API para todo salvo `episteme backup` y `episteme restore`, que llaman al caso de uso `application/maintenance` y actúan sobre los ficheros locales con los permisos del usuario del sistema. `episteme backup` hace una copia en caliente consistente; `episteme restore` exige el servidor parado y lo comprueba con un fichero de bloqueo. Una regla de import-linter limita `episteme.cli` a importar el contrato, la configuración y `application/maintenance`.
 
 Tiene dos modos:
 

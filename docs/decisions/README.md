@@ -12,9 +12,9 @@ ADRs live in [adr/](adr/), numbered, in the MADR minimal format. They are immuta
 | Decision | Status | Revisit when | Link |
 | --- | --- | --- | --- |
 | LangGraph orchestrates the agents, inside the application layer, with no adapter | Final | — | [ADR 0001](adr/0001-langgraph-orchestration.md) |
-| The project is named episteme (formerly ivlia); the installation folder and the Keychain service are moved by hand, with no migration code | Final | — | [ADR 0003](adr/0003-rename-to-episteme.md) |
 | Development happens only in a dev container attached from the Mac's VS Code: the project folder bind-mounted, dependencies in volumes, `.devcontainer/` and `.vscode/` read-only inside, no git on the Mac for this repository. Docker Sandboxes was tried and not chosen | Final | Docker Sandboxes reaches 1.0 | [ADR 0002](adr/0002-dev-container.md) |
 | No egress firewall in the dev container | Provisional | A domain-based egress filter (for example a proxy sidecar) is adopted, or before an agent gets write tools | [ADR 0002](adr/0002-dev-container.md), [docs/10](../10-plan-y-pendientes.md) |
+| The project is named episteme (formerly ivlia); the installation folder and the Keychain service are moved by hand, with no migration code | Final | — | [ADR 0003](adr/0003-rename-to-episteme.md) |
 | Claude Code's Bash sandbox off inside the dev container, through its managed settings: Docker's default seccomp profile blocks the user namespaces bubblewrap needs | Provisional | A maintained seccomp profile or documented support for the sandbox under Docker's default profile | [ai-development.md](../standards/ai-development.md#bash-sandbox) |
 | The SSH agent forwarded by VS Code; push and commit signing from the container with the user's key | Provisional | VS Code can reliably stop the forwarding (microsoft/vscode-remote-release#9466) | [ai-development.md](../standards/ai-development.md#bash-sandbox) |
 | In development the backend uses the Mac's Ollama through `host.docker.internal`: Docker Desktop has no GPU passthrough on macOS | Provisional | Docker Desktop gives containers the GPU on macOS | [docs/05](../05-modelos.md) |

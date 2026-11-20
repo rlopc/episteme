@@ -6,7 +6,7 @@ Claude Code desarrolla episteme con desarrollo guiado por especificaciones, usan
 
 ## Desarrollo independiente del uso real
 
-episteme en desarrollo e episteme en uso son dos instalaciones independientes. Los datos reales del usuario (notas, memoria, secretos) solo existen en la instalación de uso.
+episteme en desarrollo y episteme en uso son dos instalaciones independientes. Los datos reales del usuario (notas, memoria, secretos) solo existen en la instalación de uso.
 
 - Desarrollo: tiene su propia configuración y sus propias bases de datos, y una carpeta de notas de ejemplo (sintéticas o públicas) dentro del repositorio. Los tests y el conjunto de preguntas de referencia usan solo esos datos. El entorno donde corre Claude Code no contiene secretos reales.
 - Uso: la configuración y los datos viven en el Mac, fuera del repositorio, y Claude Code no tiene acceso a ellos.

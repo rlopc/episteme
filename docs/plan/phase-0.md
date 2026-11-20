@@ -129,7 +129,7 @@ Order of the first tasks (assumed): initial commit, gitleaks scan, the user crea
 
 ### 1.4 User-only actions
 
-- [x] User only: create the public GitHub repository `episteme` ([docs/01](../01-vision-y-alcance.md), "Datos del proyecto") and add the remote.
+- [x] User only: create the public GitHub repository `ivlia` ([docs/01](../01-vision-y-alcance.md), "Datos del proyecto") and add the remote.
 - [x] User only: enable secret scanning and push protection, if Validar confirms it is free (decision 2026-11-09). Before the first push if GitHub allows it, otherwise right after.
 - [x] User only: push the initial commit to `main` after the gitleaks scan, then create the ruleset right after (decision 2026-11-09).
 - [x] User only: repository settings: allow only squash merging; default squash message = PR title ([docs/08](../08-ingenieria-y-calidad.md), "Git").
@@ -495,7 +495,7 @@ Automate one SemVer version for the whole repository and its CHANGELOG with rele
 
 - After the step 6 PR merges, release-please opens a release PR whose title passes the title check, and CI runs on it.
 - After the release PR merges, a GitHub release exists with the wheel and a `.sigstore.json` asset.
-- `gh attestation verify <wheel> --repo <owner>/episteme` succeeds.
+- `gh attestation verify <wheel> --repo <owner>/ivlia` succeeds.
 - `uv tool install <wheel>` in a clean environment works, `episteme --help` runs, and `episteme-server` serves the SPA. The test runs with `UV_TOOL_DIR` and `UV_TOOL_BIN_DIR` set to a temporary folder inside `.dev/`, so nothing is written to `~/.local` (assumed), with `EPISTEME_HOME` set to a temporary directory and `EPISTEME_ENV=dev` (or a test keyring service name), so it never creates a real use installation or writes to the system keychain (assumed). A real use installation is "User only" and outside Phase 0.
 - The versions in `backend/pyproject.toml` and `frontend/package.json` match the release tag.
 
