@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from ivlia.config.errors import ConfigError
-from ivlia.config.installation import Environment, Installation
-from ivlia.config.settings import load_config
+from episteme.config.errors import ConfigError
+from episteme.config.installation import Environment, Installation
+from episteme.config.settings import load_config
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -42,7 +42,7 @@ def test_toml_overrides_defaults_and_environment_overrides_toml(
     (tmp_path / "config.toml").write_text(
         'port = 9000\ndev_origin = "http://localhost:3000"\n'
     )
-    monkeypatch.setenv("IVLIA_PORT", "9100")
+    monkeypatch.setenv("EPISTEME_PORT", "9100")
 
     config = load_config(_installation(tmp_path))
 

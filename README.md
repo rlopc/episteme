@@ -1,6 +1,6 @@
-# ivlia
+# episteme
 
-ivlia is a 100 % local personal AI assistant that manages knowledge of any type (notes, documents and other sources) and answers citing where each answer comes from. It runs on the user's Mac (Apple M2 Max, 64 GB), keeps data on the machine unless the user decides otherwise, and is built in small vertical slices with production-level practices from day one.
+episteme (formerly ivlia) is a 100 % local personal AI assistant that manages knowledge of any type (notes, documents and other sources) and answers citing where each answer comes from. It runs on the user's Mac (Apple M2 Max, 64 GB), keeps data on the machine unless the user decides otherwise, and is built in small vertical slices with production-level practices from day one.
 
 ## Status
 
@@ -27,13 +27,13 @@ Run git and the project's tools only inside the container, never on the host. Se
 
 ## Install a release
 
-Only tagged releases are installed for use. Download the wheel and its provenance bundle from a [release](https://github.com/rlopc/ivlia/releases), verify it, and install it with [uv](https://docs.astral.sh/uv/):
+Only tagged releases are installed for use. Download the wheel and its provenance bundle from a [release](https://github.com/rlopc/episteme/releases), verify it, and install it with [uv](https://docs.astral.sh/uv/):
 
 ```sh
-gh release download vX.Y.Z --repo rlopc/ivlia --pattern '*.whl*'
-gh attestation verify ivlia-X.Y.Z-py3-none-any.whl --repo rlopc/ivlia \
-  --signer-workflow rlopc/ivlia/.github/workflows/release.yml
-uv tool install ./ivlia-X.Y.Z-py3-none-any.whl
+gh release download vX.Y.Z --repo rlopc/episteme --pattern '*.whl*'
+gh attestation verify episteme-X.Y.Z-py3-none-any.whl --repo rlopc/episteme \
+  --signer-workflow rlopc/episteme/.github/workflows/release.yml
+uv tool install ./episteme-X.Y.Z-py3-none-any.whl
 ```
 
 Details: [docs/standards/release.md](docs/standards/release.md).

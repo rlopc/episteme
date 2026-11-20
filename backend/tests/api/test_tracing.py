@@ -9,7 +9,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from ivlia.api.tracing import RequestSpan
+from episteme.api.tracing import RequestSpan
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -68,7 +68,7 @@ def test_fastapi_native_telemetry_stays_off(
         span.instrumentation_scope.name if span.instrumentation_scope else None
         for span in exporter.get_finished_spans()
     }
-    assert scopes == {"ivlia.api.tracing"}
+    assert scopes == {"episteme.api.tracing"}
 
 
 def test_unhandled_exception_keeps_only_its_type(
@@ -88,7 +88,7 @@ def test_unhandled_exception_keeps_only_its_type(
         span
         for span in exporter.get_finished_spans()
         if span.instrumentation_scope
-        and span.instrumentation_scope.name == "ivlia.api.tracing"
+        and span.instrumentation_scope.name == "episteme.api.tracing"
     ]
     assert span.status.description == "RuntimeError"
     assert span.events == ()

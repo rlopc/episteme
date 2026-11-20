@@ -1,7 +1,7 @@
 {
   "openapi": "3.2.0",
   "info": {
-    "title": "ivlia",
+    "title": "episteme",
     "version": "0.1.2"
   },
   "paths": {
@@ -324,7 +324,7 @@
       "APIKeyCookie": {
         "type": "apiKey",
         "in": "cookie",
-        "name": "ivlia_session"
+        "name": "episteme_session"
       }
     }
   }

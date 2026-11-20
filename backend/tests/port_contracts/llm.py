@@ -2,9 +2,9 @@ import asyncio
 
 import pytest
 
-from ivlia.domain.agents.state import Message
-from ivlia.domain.data_policy.levels import DataLevel
-from ivlia.domain.models.llm import LLM
+from episteme.domain.agents.state import Message
+from episteme.domain.data_policy.levels import DataLevel
+from episteme.domain.models.llm import LLM
 
 CONVERSATION = (Message(role="user", content="Hi"),)
 

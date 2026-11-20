@@ -6,15 +6,15 @@ from typing import TYPE_CHECKING
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from ivlia.adapters.hello_world_llm import HelloWorldLLM
-from ivlia.api.app import create_app
-from ivlia.application.chat import Chat
-from ivlia.application.orchestration.graph import build_graph
-from ivlia.config.installation import Environment, Installation
-from ivlia.config.settings import Config, Settings
+from episteme.adapters.hello_world_llm import HelloWorldLLM
+from episteme.api.app import create_app
+from episteme.application.chat import Chat
+from episteme.application.orchestration.graph import build_graph
+from episteme.config.installation import Environment, Installation
+from episteme.config.settings import Config, Settings
 
 if TYPE_CHECKING:
-    from ivlia.api.sessions import SessionStore
+    from episteme.api.sessions import SessionStore
 
 TOKEN = "test-token"  # noqa: S105 (fake token)
 AUTH = {"Authorization": f"Bearer {TOKEN}"}
@@ -25,7 +25,7 @@ def make_client(
     sessions: SessionStore | None = None,
     spa_dir: Path | None = None,
 ) -> TestClient:
-    """A client of the hello-world app, sending ivlia's own Host."""
+    """A client of the hello-world app, sending episteme's own Host."""
     config = Config(
         installation=Installation(env=env, home=Path("/nonexistent")),
         settings=Settings.model_construct(),

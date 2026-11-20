@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
     from fastapi.testclient import TestClient
 
-INDEX = "<!doctype html><title>ivlia</title>"
+INDEX = "<!doctype html><title>episteme</title>"
 
 
 @pytest.fixture

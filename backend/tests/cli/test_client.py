@@ -5,10 +5,10 @@ import httpx2
 import pytest
 from api_client import AUTH, make_client
 
-from ivlia.cli.client import ApiClient, ApiError
-from ivlia.contract.events import EndEvent, TokenEvent
-from ivlia.contract.requests import ChatRequest
-from ivlia.contract.sessions import SessionLink
+from episteme.cli.client import ApiClient, ApiError
+from episteme.contract.events import EndEvent, TokenEvent
+from episteme.contract.requests import ChatRequest
+from episteme.contract.sessions import SessionLink
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -94,10 +94,13 @@ def test_chat_reports_an_error_status(status: int, message: str) -> None:
 @pytest.mark.parametrize(
     ("error", "message"),
     [
-        (httpx2.ConnectError("refused"), "Cannot reach the ivlia server"),
+        (httpx2.ConnectError("refused"), "Cannot reach the episteme server"),
         (httpx2.ReadTimeout("slow"), "did not answer in time"),
-        (httpx2.RemoteProtocolError("broken"), "connection to the ivlia server failed"),
-        (httpx2.DecodingError("bad gzip"), "connection to the ivlia server failed"),
+        (
+            httpx2.RemoteProtocolError("broken"),
+            "connection to the episteme server failed",
+        ),
+        (httpx2.DecodingError("bad gzip"), "connection to the episteme server failed"),
     ],
 )
 def test_chat_reports_a_transport_error(error: Exception, message: str) -> None:
@@ -126,7 +129,7 @@ def test_session_link_returns_the_link() -> None:
     ],
     ids=["invalid-body", "other-scheme", "other-host", "other-path"],
 )
-def test_session_link_rejects_a_link_that_is_not_ivlias(body: bytes) -> None:
+def test_session_link_rejects_a_link_that_is_not_from_episteme(body: bytes) -> None:
     with pytest.raises(ApiError, match="invalid session link"):
         _answer(200, body).session_link()
 
@@ -149,5 +152,5 @@ def test_session_link_reports_an_error_status() -> None:
 
 
 def test_session_link_reports_a_transport_error() -> None:
-    with pytest.raises(ApiError, match="Cannot reach the ivlia server"):
+    with pytest.raises(ApiError, match="Cannot reach the episteme server"):
         _failing(httpx2.ConnectError("refused")).session_link()

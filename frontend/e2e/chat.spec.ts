@@ -6,7 +6,7 @@ test("a one-time link opens the chat, which streams the answer", async ({
   request,
   baseURL,
 }) => {
-  // ivlia is local: the page must not reach any other origin, nor break
+  // episteme is local: the page must not reach any other origin, nor break
   // its Content-Security-Policy.
   const foreign: string[] = [];
   page.on("request", (r) => {
@@ -21,7 +21,9 @@ test("a one-time link opens the chat, which streams the answer", async ({
   });
 
   const response = await request.post("/api/session/link", {
-    headers: { Authorization: `Bearer ${process.env.IVLIA_E2E_TOKEN ?? ""}` },
+    headers: {
+      Authorization: `Bearer ${process.env.EPISTEME_E2E_TOKEN ?? ""}`,
+    },
   });
   expect(response.ok()).toBe(true);
   const { url } = (await response.json()) as { url: string };

@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING
 
 from langchain_core.tracers.langchain import wait_for_all_tracers
 
-from ivlia.adapters.hello_world_llm import HelloWorldLLM
-from ivlia.application.orchestration.graph import build_graph, stream_reply
-from ivlia.domain.agents.state import AgentState, Message
+from episteme.adapters.hello_world_llm import HelloWorldLLM
+from episteme.application.orchestration.graph import build_graph, stream_reply
+from episteme.domain.agents.state import AgentState, Message
 
 if TYPE_CHECKING:
     import pytest

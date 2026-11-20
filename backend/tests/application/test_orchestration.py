@@ -1,8 +1,8 @@
 import asyncio
 
-from ivlia.adapters.hello_world_llm import REPLY_CHUNKS, HelloWorldLLM
-from ivlia.application.orchestration.graph import build_graph, stream_reply
-from ivlia.domain.agents.state import AgentState, Message
+from episteme.adapters.hello_world_llm import REPLY_CHUNKS, HelloWorldLLM
+from episteme.application.orchestration.graph import build_graph, stream_reply
+from episteme.domain.agents.state import AgentState, Message
 
 
 async def _collect() -> list[str]:

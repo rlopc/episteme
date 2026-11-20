@@ -1,6 +1,6 @@
 # Backend
 
-The Python package `ivlia` in `backend/`: domain, application, adapters, API and the CLI. Design: [docs/02](../02-arquitectura-e-interfaces.md). The HTTP API has its own page: [api.md](api.md).
+The Python package `episteme` in `backend/`: domain, application, adapters, API and the CLI. Design: [docs/02](../02-arquitectura-e-interfaces.md). The HTTP API has its own page: [api.md](api.md).
 
 ## Project
 
@@ -12,7 +12,7 @@ The Python package `ivlia` in `backend/`: domain, application, adapters, API and
 
 ## Layout and layers
 
-Layer first, in `backend/src/ivlia/`:
+Layer first, in `backend/src/episteme/`:
 
 | Package | Holds | May import |
 | --- | --- | --- |
@@ -21,9 +21,9 @@ Layer first, in `backend/src/ivlia/`:
 | `config/` | installation identity, settings, secrets | `contract`, `domain` |
 | `application/` | use cases (`chat`), `orchestration` (LangGraph), `maintenance` | `config`, `contract`, `domain` |
 | `api/`, `adapters/`, `cli/` | HTTP API; port implementations, logs, traces, SQLite; command line | the layers below, not each other |
-| `cli/` (narrower) | the CLI, which reaches ivlia only through the API | `contract`, `config`, `application/maintenance` |
+| `cli/` (narrower) | the CLI, which reaches episteme only through the API | `contract`, `config`, `application/maintenance` |
 | `bootstrap.py` | the composition root: builds everything in start order | everything |
-| `server.py` | `ivlia-server` | `bootstrap` and the layers below, never `adapters` directly |
+| `server.py` | `episteme-server` | `bootstrap` and the layers below, never `adapters` directly |
 
 Import rules, checked by import-linter (`[tool.importlinter]` in `pyproject.toml`, `include_external_packages = true`):
 
@@ -31,8 +31,8 @@ Import rules, checked by import-linter (`[tool.importlinter]` in `pyproject.toml
 - The domain imports no framework (a `forbidden` contract listing the runtime dependencies).
 - Only `bootstrap` imports `adapters`; `server` reaches them only through it.
 - `langgraph`, `langsmith` and `langchain_core` are imported only in `application/orchestration` ([ADR 0001](../decisions/adr/0001-langgraph-orchestration.md)).
-- `ivlia.cli` imports only `contract`, `config` and `application/maintenance` (a `forbidden` contract on `application` and `domain`, with `maintenance` excepted). Only direct imports count, because `contract` and `config` may reach the domain.
-- Only `ivlia.cli.client` imports `httpx2`.
+- `episteme.cli` imports only `contract`, `config` and `application/maintenance` (a `forbidden` contract on `application` and `domain`, with `maintenance` excepted). Only direct imports count, because `contract` and `config` may reach the domain.
+- Only `episteme.cli.client` imports `httpx2`.
 
 Each contract was checked to fail when its rule is broken.
 
@@ -86,40 +86,40 @@ Not used: `FBT` (boolean arguments) and `ERA` (commented-out code).
 - pytest (`[tool.pytest]`): `importlib` import mode; `pythonpath = ["tests"]` for helpers such as `api_client.py` and `port_contracts/`.
 - Every warning is an error. The only exception is a known deprecation inside `langsmith`, ignored by message and module.
 - The `langsmith` pytest plugin, which comes with `langgraph`, is disabled (`-p no:langsmith_plugin`).
-- `tests/conftest.py` removes every `IVLIA_*` variable before each test and points `keyring` at its failing backend, so no test reaches the real keychain.
-- API tests use FastAPI's `TestClient`, which runs on httpx2 (Starlette 1.10). httpx2 is also the CLI's HTTP client. Classic httpx is not a dependency of ivlia; it arrives only through `langchain-core`.
+- `tests/conftest.py` removes every `EPISTEME_*` variable before each test and points `keyring` at its failing backend, so no test reaches the real keychain.
+- API tests use FastAPI's `TestClient`, which runs on httpx2 (Starlette 1.10). httpx2 is also the CLI's HTTP client. Classic httpx is not a dependency of episteme; it arrives only through `langchain-core`.
 - Async code is tested with `asyncio.run` inside synchronous tests; there is no async pytest plugin.
 - coverage.py runs once and reports twice (`just check-backend`): the domain at 100 %, the rest at 95 %. Branch coverage is on. Lines with `assert_never(` are excluded: type checking proves them unreachable.
 
 ## Configuration
 
-Design: [docs/07](../07-transversales.md) ("Configuración"). Code: `ivlia.config`.
+Design: [docs/07](../07-transversales.md) ("Configuración"). Code: `episteme.config`.
 
 - Installation identity comes only from the environment, because the settings file lives inside the installation folder:
-  - `IVLIA_ENV`: `use` (default) or `dev`.
-  - `IVLIA_HOME`: the installation folder, an absolute path. Default: `~/Library/Application Support/ivlia`.
-  - In the repository, `just` and mise set `IVLIA_ENV=dev` and `IVLIA_HOME=<repo>/.dev` ([justfile](../../justfile), `[env]` in [mise.toml](../../mise.toml)). mise overrides these variables for commands that run through its shims, such as `uv` inside the repository.
-- Start guard: if the package was installed from a folder (PEP 610 `direct_url.json` with `dir_info`, as the editable install of `backend/` is), ivlia starts only as the dev installation, with `IVLIA_ENV=dev` and `IVLIA_HOME` set; otherwise it does not start and says why. So a run from the repository never reaches the real data or the system keyring. A release installed from a wheel (`archive_info`) is the use installation, with the default folder unless `IVLIA_HOME` says otherwise.
-- Settings: defaults in code (`ivlia.config.settings.Settings`), then `IVLIA_HOME/config.toml`, then `IVLIA_*` environment variables, with the environment winning. Unknown keys are errors. An invalid value stops the start with a message that names the setting and the value.
-- Settings today: `port` (default 8765 in use, 8766 in dev), `dev_origin`, `keyring_service` (default `ivlia`), `log_content` (default off) and `trace_console` (default off).
+  - `EPISTEME_ENV`: `use` (default) or `dev`.
+  - `EPISTEME_HOME`: the installation folder, an absolute path. Default: `~/Library/Application Support/episteme`.
+  - In the repository, `just` and mise set `EPISTEME_ENV=dev` and `EPISTEME_HOME=<repo>/.dev` ([justfile](../../justfile), `[env]` in [mise.toml](../../mise.toml)). mise overrides these variables for commands that run through its shims, such as `uv` inside the repository.
+- Start guard: if the package was installed from a folder (PEP 610 `direct_url.json` with `dir_info`, as the editable install of `backend/` is), episteme starts only as the dev installation, with `EPISTEME_ENV=dev` and `EPISTEME_HOME` set; otherwise it does not start and says why. So a run from the repository never reaches the real data or the system keyring. A release installed from a wheel (`archive_info`) is the use installation, with the default folder unless `EPISTEME_HOME` says otherwise.
+- Settings: defaults in code (`episteme.config.settings.Settings`), then `EPISTEME_HOME/config.toml`, then `EPISTEME_*` environment variables, with the environment winning. Unknown keys are errors. An invalid value stops the start with a message that names the setting and the value.
+- Settings today: `port` (default 8765 in use, 8766 in dev), `dev_origin`, `keyring_service` (default `episteme`), `log_content` (default off) and `trace_console` (default off).
 
 ## Secrets
 
-`ivlia.config.secrets`. Values are `SecretStr`, so they are hidden in reprs and logs.
+`episteme.config.secrets`. Values are `SecretStr`, so they are hidden in reprs and logs.
 
-- Lookup order: the `IVLIA_<NAME>` variable, then the system keyring (service `keyring_service`), then `IVLIA_HOME/secrets.json`.
+- Lookup order: the `EPISTEME_<NAME>` variable, then the system keyring (service `keyring_service`), then `EPISTEME_HOME/secrets.json`.
 - The dev installation never uses the keyring.
 - Generated secrets, such as the API token (32 random bytes, URL-safe), are created on first use and stored in the keyring. If the keyring fails, they go to the file.
-- The file is written atomically, with mode `0600`. If it is readable by other users or is not a JSON object of strings, ivlia does not start.
+- The file is written atomically, with mode `0600`. If it is readable by other users or is not a JSON object of strings, episteme does not start.
 
 ## Installation folder
 
-- `bootstrap` creates `IVLIA_HOME` with mode `0700` before anything writes into it.
-- It holds `config.toml`, `secrets.json`, `memory.sqlite3` and `logs/` (`ivlia.log`, `traces.jsonl`).
+- `bootstrap` creates `EPISTEME_HOME` with mode `0700` before anything writes into it.
+- It holds `config.toml`, `secrets.json`, `memory.sqlite3` and `logs/` (`episteme.log`, `traces.jsonl`).
 
 ## Migrations
 
-`ivlia.adapters.sqlite.migrations`.
+`episteme.adapters.sqlite.migrations`.
 
 - An own runner, forward only. Each database has a folder of SQL files `NNNN_description.sql`, numbered from 0001 with no gaps, shipped inside the package.
 - `PRAGMA user_version` holds the last migration applied. Connections use `autocommit=False`, so each migration and its `user_version` update run in one transaction; a failure rolls both back and stops the start with the file name.
@@ -130,14 +130,14 @@ Design: [docs/07](../07-transversales.md) ("Configuración"). Code: `ivlia.confi
 
 Design: [docs/07](../07-transversales.md) ("Observabilidad"). Nothing leaves the Mac: there is no external exporter.
 
-- Code logs through the standard `logging` module. structlog only formats records (`adapters/observability/logs.py`): JSON lines in `IVLIA_HOME/logs/ivlia.log`, rotating at 10 MB with 5 backups, with `trace_id` and `span_id` from the current span.
+- Code logs through the standard `logging` module. structlog only formats records (`adapters/observability/logs.py`): JSON lines in `EPISTEME_HOME/logs/episteme.log`, rotating at 10 MB with 5 backups, with `trace_id` and `span_id` from the current span.
 - Content never reaches the log unless `log_content` is on:
   - The extra fields `content`, `text`, `prompt`, `reply` and `messages` are replaced by `[removed]`.
   - So is what logged exceptions say (message, notes, syntax error line), also inside exception groups, because it can quote the conversation.
   - Frame locals are never logged, even in debug mode.
 - With `log_content` on, everything is logged, level 3 data included. Phase 0 has no level 3 data; masking secrets in logs arrives with the secret detector in slice 2 ([docs/10](../10-plan-y-pendientes.md)).
 - Log messages are fixed text. Content goes only in the extra fields above, never interpolated into the message.
-- Traces: an OpenTelemetry `TracerProvider` (`adapters/observability/traces.py`) that always exports to `IVLIA_HOME/logs/traces.jsonl` (one span per line, rotating through `logging`), and also to the console if `trace_console` is on.
+- Traces: an OpenTelemetry `TracerProvider` (`adapters/observability/traces.py`) that always exports to `EPISTEME_HOME/logs/traces.jsonl` (one span per line, rotating through `logging`), and also to the console if `trace_console` is on.
 - Spans: one per HTTP request (`api/tracing.py`, without the query string) and one per use case (`chat`). Spans record the exception type, never its message: the SDK's `record_exception` and `set_status_on_exception` are off, and the status is set by hand.
 
 ## Third-party telemetry
@@ -149,32 +149,32 @@ Both are switched off in code and covered by tests, because an environment varia
 
 ## CLI
 
-Design: [docs/02](../02-arquitectura-e-interfaces.md) ("CLI"). Code: `ivlia.cli`. Entry point: `ivlia` (`[project.scripts]`, `ivlia.cli.app:main`), built with Typer.
+Design: [docs/02](../02-arquitectura-e-interfaces.md) ("CLI"). Code: `episteme.cli`. Entry point: `episteme` (`[project.scripts]`, `episteme.cli.app:main`), built with Typer.
 
-- The CLI uses ivlia only through the HTTP API, like the web. It reads the port and the API token through `ivlia.config`, from the same installation as the server. It never creates the token: if there is none yet, it asks to start the server once.
+- The CLI uses episteme only through the HTTP API, like the web. It reads the port and the API token through `episteme.config`, from the same installation as the server. It never creates the token: if there is none yet, it asks to start the server once.
 - Commands:
-  - `ivlia ask "<message>"` streams the answer to stdout as it arrives.
-  - `ivlia web` asks the API for a one-time link and opens the browser on it. It accepts only a link to the session page of the installation's web origin (`web_origin`: the API in use, Vite in dev; [api.md](api.md#same-origin-and-dev-origin)), so another program on the port cannot make it open any URL. If no browser opens, it prints the link, which works once within 60 seconds.
+  - `episteme ask "<message>"` streams the answer to stdout as it arrives.
+  - `episteme web` asks the API for a one-time link and opens the browser on it. It accepts only a link to the session page of the installation's web origin (`web_origin`: the API in use, Vite in dev; [api.md](api.md#same-origin-and-dev-origin)), so another program on the port cannot make it open any URL. If no browser opens, it prints the link, which works once within 60 seconds.
 - `cli/client.py` is the API client and the only module that imports httpx2. It sends contract models and yields contract events parsed with the Pydantic models:
   - Tolerant reader: an event whose `type` it does not know is skipped and logged with a fixed message, without its content. An event of a known type that does not validate is an error.
   - httpx2 does not raise on an error status, so the client checks the status before reading the stream: 401 means the token was rejected.
   - Every httpx2 request error (`RequestError`: connection, timeout, invalid stream, decoding) becomes an `ApiError` with a clear message.
   - Timeouts: 5 seconds, except reading a chat stream, which has no limit, because a local model can take long to start. Ctrl-C stops it.
 - `cli/app.py` builds the Typer app with its ways out passed in (`build_app(connect, open_browser)`), so tests replace the API and the browser. A `match` on the event types ends in `assert_never`, so mypy fails if a new event type is not handled.
-- Errors and exit codes: a configuration error, an API or connection error, an error event, or a stream that ends without `end` prints `ivlia: <message>` to stderr and exits with status 1. Usage errors exit with status 2 (Typer), including a message that the contract rejects, such as an empty one. If part of the answer was printed, its line is ended first.
+- Errors and exit codes: a configuration error, an API or connection error, an error event, or a stream that ends without `end` prints `episteme: <message>` to stderr and exits with status 1. Usage errors exit with status 2 (Typer), including a message that the contract rejects, such as an empty one. If part of the answer was printed, its line is ended first.
 - Tracebacks never show frame locals (`pretty_exceptions_show_locals=False`), because they could hold the token.
-- Logs: the CLI has no log file, because the JSON log is an adapter. Warnings go to stderr as one line, `ivlia: <message>`, without tracebacks.
+- Logs: the CLI has no log file, because the JSON log is an adapter. Warnings go to stderr as one line, `episteme: <message>`, without tracebacks.
 
 Tests (`backend/tests/cli/`):
 
 - Commands run through Typer's `CliRunner`, which keeps stdout and stderr apart.
 - Fake API: an `ApiClient` over an httpx2 `MockTransport`. Real API: the hello-world app through `TestClient`, which is an `httpx2.Client`, so the CLI streams from the real app without a server.
-- `ivlia web` uses a fake browser that records the URL; a test then checks that the API accepts the link once and sets the session cookie.
+- `episteme web` uses a fake browser that records the URL; a test then checks that the API accepts the link once and sets the session cookie.
 
 ## Server
 
-- `ivlia-server` (`[project.scripts]`, `ivlia/server.py`) builds the app with `bootstrap` and runs uvicorn on `127.0.0.1` only, on the configured port.
-- uvicorn's logs go to ivlia's JSON log (`log_config=None`), and its access log is off, because request lines carry query strings and so one-time link codes.
-- `--reload` restarts on code changes through `ivlia.bootstrap:app_factory`, and only in the dev installation; it is refused before anything is built. `just dev` runs it.
+- `episteme-server` (`[project.scripts]`, `episteme/server.py`) builds the app with `bootstrap` and runs uvicorn on `127.0.0.1` only, on the configured port.
+- uvicorn's logs go to episteme's JSON log (`log_config=None`), and its access log is off, because request lines carry query strings and so one-time link codes.
+- `--reload` restarts on code changes through `episteme.bootstrap:app_factory`, and only in the dev installation; it is refused before anything is built. `just dev` runs it.
 - Known limitation of reload mode: the supervising process and the server process both open the log and trace files, and `RotatingFileHandler` is not safe across processes, so a rotation can lose lines. It affects only the dev installation.
 - A start error (`StartupError`: invalid or malformed configuration or secrets file, or a migration problem) prints its message and exits with status 1.

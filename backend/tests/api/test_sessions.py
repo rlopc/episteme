@@ -4,13 +4,13 @@ from urllib.parse import urlsplit
 import pytest
 from api_client import AUTH, make_client
 
-from ivlia.api.sessions import (
+from episteme.api.sessions import (
     COOKIE_NAMES,
     LINK_LIFETIME,
     SESSION_LIFETIME,
     SessionStore,
 )
-from ivlia.config.installation import Environment
+from episteme.config.installation import Environment
 
 if TYPE_CHECKING:
     from fastapi.testclient import TestClient
@@ -148,5 +148,5 @@ def test_dev_installation_uses_its_own_cookie() -> None:
     client = make_client(Environment.DEV)
     response = client.get(_link_path(client))
 
-    assert response.headers["set-cookie"].startswith("ivlia_session_dev=")
+    assert response.headers["set-cookie"].startswith("episteme_session_dev=")
     assert client.post("/api/chat", json=CHAT).status_code == 200

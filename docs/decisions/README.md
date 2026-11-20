@@ -12,6 +12,7 @@ ADRs live in [adr/](adr/), numbered, in the MADR minimal format. They are immuta
 | Decision | Status | Revisit when | Link |
 | --- | --- | --- | --- |
 | LangGraph orchestrates the agents, inside the application layer, with no adapter | Final | — | [ADR 0001](adr/0001-langgraph-orchestration.md) |
+| The project is named episteme (formerly ivlia); the installation folder and the Keychain service are moved by hand, with no migration code | Final | — | [ADR 0003](adr/0003-rename-to-episteme.md) |
 | Development happens only in a dev container attached from the Mac's VS Code: the project folder bind-mounted, dependencies in volumes, `.devcontainer/` and `.vscode/` read-only inside, no git on the Mac for this repository. Docker Sandboxes was tried and not chosen | Final | Docker Sandboxes reaches 1.0 | [ADR 0002](adr/0002-dev-container.md) |
 | No egress firewall in the dev container | Provisional | A domain-based egress filter (for example a proxy sidecar) is adopted, or before an agent gets write tools | [ADR 0002](adr/0002-dev-container.md), [docs/10](../10-plan-y-pendientes.md) |
 | Claude Code's Bash sandbox off inside the dev container, through its managed settings: Docker's default seccomp profile blocks the user namespaces bubblewrap needs | Provisional | A maintained seccomp profile or documented support for the sandbox under Docker's default profile | [ai-development.md](../standards/ai-development.md#bash-sandbox) |
@@ -23,8 +24,8 @@ ADRs live in [adr/](adr/), numbered, in the MADR minimal format. They are immuta
 | httpx2 as the HTTP client, with no classic httpx | Final | — | [backend.md](../standards/backend.md#tests-and-coverage) |
 | Session cookie without `Secure` | Final | When Safari keeps `Secure` cookies on `http://localhost` | [api.md](../standards/api.md#web-session) |
 | LangSmith tracing and FastAPI's built-in telemetry off in code | Final | — | [backend.md](../standards/backend.md#third-party-telemetry) |
-| A run from a source folder starts only as the dev installation (`IVLIA_ENV=dev` and `IVLIA_HOME`) | Final | — | [backend.md](../standards/backend.md#configuration) |
-| One session cookie name per installation (`ivlia_session`, `ivlia_session_dev`) | Final | — | [api.md](../standards/api.md#web-session) |
+| A run from a source folder starts only as the dev installation (`EPISTEME_ENV=dev` and `EPISTEME_HOME`) | Final | — | [backend.md](../standards/backend.md#configuration) |
+| One session cookie name per installation (`episteme_session`, `episteme_session_dev`) | Final | — | [api.md](../standards/api.md#web-session) |
 | An existing database with pending migrations does not start | Provisional | Slice 2, when backups arrive | [backend.md](../standards/backend.md#migrations) |
 | pre-commit, not prek | Provisional | When prek reaches 1.0 | [repository.md](../standards/repository.md#pre-commit) |
 | actionlint, not the jactionlint fork that mise's registry recommends | Provisional | A workflow needs anything else actionlint does not know (the `ubuntu-26.04` label is declared in `.github/actionlint.yaml`), jactionlint settles, or actionlint is archived | [repository.md](../standards/repository.md#known-limitations-and-risks-to-revisit) |

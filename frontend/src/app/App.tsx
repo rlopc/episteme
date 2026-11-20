@@ -10,7 +10,7 @@ export function App({ queryClient }: { queryClient: QueryClient }) {
       <BrowserRouter>
         <div className="flex h-dvh flex-col">
           <header className="flex items-center justify-between border-b p-4">
-            <h1 className="text-lg font-semibold">ivlia</h1>
+            <h1 className="text-lg font-semibold">episteme</h1>
             <HealthStatus />
           </header>
           <Routes>

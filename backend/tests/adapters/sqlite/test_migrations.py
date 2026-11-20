@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from ivlia.adapters.sqlite.memory import FILE_NAME, open_memory_db
-from ivlia.adapters.sqlite.migrations import (
+from episteme.adapters.sqlite.memory import FILE_NAME, open_memory_db
+from episteme.adapters.sqlite.migrations import (
     Migration,
     MigrationError,
     load_migrations,
@@ -78,7 +78,7 @@ def test_existing_database_with_pending_migrations_does_not_start(
     assert _version(db) == 1
 
 
-def test_database_newer_than_ivlia_does_not_start(db: sqlite3.Connection) -> None:
+def test_database_newer_than_episteme_does_not_start(db: sqlite3.Connection) -> None:
     migrate(db, [CREATE_A, CREATE_B], "test")
 
     with pytest.raises(MigrationError, match="newer than this version"):

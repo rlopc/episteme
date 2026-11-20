@@ -1,19 +1,19 @@
 import asyncio
 from typing import TYPE_CHECKING
 
-from ivlia.adapters.hello_world_llm import REPLY_CHUNKS, HelloWorldLLM
-from ivlia.application.chat import REPLY_FAILED, Chat
-from ivlia.application.orchestration.graph import build_graph
-from ivlia.contract.events import EndEvent, ErrorEvent, Event, TokenEvent
-from ivlia.domain.agents.state import AgentState, Message
-from ivlia.domain.data_policy.levels import DataLevel
+from episteme.adapters.hello_world_llm import REPLY_CHUNKS, HelloWorldLLM
+from episteme.application.chat import REPLY_FAILED, Chat
+from episteme.application.orchestration.graph import build_graph
+from episteme.contract.events import EndEvent, ErrorEvent, Event, TokenEvent
+from episteme.domain.agents.state import AgentState, Message
+from episteme.domain.data_policy.levels import DataLevel
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Sequence
 
     import pytest
 
-    from ivlia.domain.models.llm import LLM
+    from episteme.domain.models.llm import LLM
 
 STATE = AgentState(messages=(Message(role="user", content="Hi"),))
 

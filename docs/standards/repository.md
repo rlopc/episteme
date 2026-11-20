@@ -25,7 +25,7 @@ Every development tool meets these rules. Review a tool against them whenever it
 - pre-commit, pre-commit-hooks and codespell are dev dependencies of the root, locked with hashes in `uv.lock`. `just setup` installs everything with `uv sync --locked --all-packages`: a plain `uv sync` is exact and installs one part only (in `backend/` it removes pre-commit). `uv run` does not remove packages, so the recipes do not have this problem.
 - The root pnpm workspace ([pnpm-workspace.yaml](../../pnpm-workspace.yaml)) holds Prettier, markdownlint-cli2, cspell (with `@cspell/dict-es-es`) and OpenSpec as exact dev dependencies, with a single `pnpm-lock.yaml`. `frontend/` is its other package ([frontend.md](frontend.md)).
 - `.mise/` (mise local state) is gitignored. A fresh clone needs `mise trust` before `mise install`. `just setup` and CI install with `mise install --locked`: every tool has a URL and a checksum for each platform in `mise.lock`. `exec_auto_install = false`: `mise exec` never installs a missing tool on its own.
-- `[env]` in `mise.toml` also sets `IVLIA_ENV=dev` and `IVLIA_HOME=<repo>/.dev`, so any command in the repository uses the dev installation ([backend.md](backend.md#configuration)).
+- `[env]` in `mise.toml` also sets `EPISTEME_ENV=dev` and `EPISTEME_HOME=<repo>/.dev`, so any command in the repository uses the dev installation ([backend.md](backend.md#configuration)).
 
 ## Dev container
 
@@ -44,7 +44,7 @@ Development happens only in the dev container defined in [.devcontainer/](../../
 
 ## `just` recipes
 
-Defined in the [justfile](../../justfile). It exports `OPENSPEC_TELEMETRY=0`, `DO_NOT_TRACK=1`, and `IVLIA_ENV=dev` with `IVLIA_HOME=<repo>/.dev` (the dev installation). `mise.toml` sets the last two too, and jdx/mise-action exports them in CI (its `env` input, on by default); the justfile repeats them on purpose, so every recipe uses the dev installation however `just` is started. `set ignore-comments` keeps comment lines inside linewise recipes (not shebang recipes) from being echoed or run.
+Defined in the [justfile](../../justfile). It exports `OPENSPEC_TELEMETRY=0`, `DO_NOT_TRACK=1`, and `EPISTEME_ENV=dev` with `EPISTEME_HOME=<repo>/.dev` (the dev installation). `mise.toml` sets the last two too, and jdx/mise-action exports them in CI (its `env` input, on by default); the justfile repeats them on purpose, so every recipe uses the dev installation however `just` is started. `set ignore-comments` keeps comment lines inside linewise recipes (not shebang recipes) from being echoed or run.
 
 - `just setup`: `mise install --locked`, `pnpm install --frozen-lockfile`, the Playwright Chromium browser, `uv sync --locked --all-packages`, `pre-commit install` and `pre-commit install-hooks` (through `uv run --locked`, like every pre-commit call). Uses the network; the only recipe that installs.
 - `just check`: every local check, stopping at the first error: `pre-commit run --all-files`, `gitleaks git`, the test of the researcher's guard hook, `openspec validate --all --strict`, `just check-links --offline`, `just check-backend` and `just check-frontend`.
@@ -52,8 +52,8 @@ Defined in the [justfile](../../justfile). It exports `OPENSPEC_TELEMETRY=0`, `D
 - `just check-backend`: mypy, import-linter, and the tests under coverage with its two reports ([backend.md](backend.md#tests-and-coverage)). All through `uv run --locked`. ruff runs in pre-commit.
 - `just check-frontend`: the contract check, knip, Vitest with coverage, the build (`tsc -b`, then `vite build`) and Playwright ([frontend.md](frontend.md)). ESLint and Prettier run in pre-commit. Playwright starts a server and a browser, so outside the dev container it runs outside Claude Code's sandbox.
 - `just contract`: exports the event contract and the OpenAPI document, and generates the frontend's types and validator ([api.md](api.md#export)).
-- `just dev`: `ivlia-server --reload` on port 8766, for the dev installation.
-- `just dev-web`: `just dev` and the Vite dev server together; `ivlia web` opens Vite ([frontend.md](frontend.md#development)).
+- `just dev`: `episteme-server --reload` on port 8766, for the dev installation.
+- `just dev-web`: `just dev` and the Vite dev server together; `episteme web` opens Vite ([frontend.md](frontend.md#development)).
 - `just update-tools`: `mise upgrade --bump`, which upgrades every tool in `mise.toml` to its newest release at least 7 days old and updates `mise.lock`. Uses the network. `tool-updates.yml` reminds monthly ([ci.md](ci.md#dependabot)).
 - `just review-diff [base]`: writes the diff against `base` (default `main`; pass the parent branch of a stacked PR) and the changed-file list to `.dev/review/` for the reviewer agent. `base` reaches git as a positional argument after `--end-of-options`, so it is never shell code nor a git option.
 

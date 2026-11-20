@@ -4,7 +4,7 @@ The SPA in `frontend/`: React with TypeScript, built with Vite, served by FastAP
 
 ## Project
 
-- A package of the root pnpm workspace (`ivlia-frontend`, [frontend/package.json](../../frontend/package.json)), with the single root `pnpm-lock.yaml`. Dependencies are pinned to exact versions; adding or upgrading one needs the user's confirmation.
+- A package of the root pnpm workspace (`episteme-frontend`, [frontend/package.json](../../frontend/package.json)), with the single root `pnpm-lock.yaml`. Dependencies are pinned to exact versions; adding or upgrading one needs the user's confirmation.
 - TypeScript 6.0 with `strict` in its three projects: `tsconfig.app.json` (`src/`), `tsconfig.node.json` (configs and `scripts/`) and `tsconfig.e2e.json` (`e2e/`, with the DOM types for code that runs in the page). TypeScript 7 is not used yet: typescript-eslint supports `<6.1`.
 - `@/` is `src/`, in `tsconfig.json`, `tsconfig.app.json`, `vite.config.ts` and `components.json`.
 - Tailwind 4 through `@tailwindcss/vite`. shadcn (style `base-nova`, Base UI primitives) writes its components to `src/components/ui/` and its helper to `src/shared/lib/utils.ts`.
@@ -47,7 +47,7 @@ An entities layer (as in Feature-Sliced Design) is added only if it appears.
 `src/api/chat.ts`: `streamChat(message, signal?)` posts `{"message": ...}` to `/api/chat` and yields contract events.
 
 - `fetch`, then `TextDecoderStream` and eventsource-parser's `EventSourceParserStream`, read with a stream reader.
-- It checks the status first (401 means the session ended; it says to run `ivlia web`) and that `Content-Type` is `text/event-stream`.
+- It checks the status first (401 means the session ended; it says to run `episteme web`) and that `Content-Type` is `text/event-stream`.
 - Each event is validated with the generated Ajv validator. Tolerant reader: an unknown `type` (Ajv's `discriminator` error `mapping`) is skipped and logged with a fixed message, without its content; any other invalid event is an error.
 - Errors are `ApiError` with a message shown as is, also when the connection fails in the middle of the stream. A cancellation (`signal`) passes through unchanged. When the caller stops reading, the response is closed.
 - Requests use the session cookie (same origin); the web never sees the token.
@@ -70,11 +70,11 @@ An entities layer (as in Feature-Sliced Design) is added only if it appears.
 ## End-to-end and accessibility
 
 - Playwright ([frontend/playwright.config.ts](../../frontend/playwright.config.ts)) with Chromium, against the built SPA served by FastAPI, as in use. `just setup` installs the browser.
-- `webServer` starts `ivlia-server` on port 8767 with a temporary `IVLIA_HOME`, a random token per run in `IVLIA_API_TOKEN`, and `IVLIA_DEV_ORIGIN` set to the server itself, so one-time links point at it. The dev installation's data is never touched.
+- `webServer` starts `episteme-server` on port 8767 with a temporary `EPISTEME_HOME`, a random token per run in `EPISTEME_API_TOKEN`, and `EPISTEME_DEV_ORIGIN` set to the server itself, so one-time links point at it. The dev installation's data is never touched.
 - `e2e` serves the SPA as last built: run `pnpm run build` first (`just check-frontend` does). The temporary folder is removed at the end (`e2e/teardown.ts`).
 - The test mints a link with the token, opens it, sends a message and sees the hello-world answer. It also checks that axe finds no violations, that no request leaves the page's origin, and that no `securitypolicyviolation` event fires.
 
 ## Development
 
-- `just dev-web` runs `ivlia-server --reload` and Vite together. Vite listens on `http://localhost:5173` (`strictPort`) and proxies `/api` to the API with `changeOrigin: true` ([api.md](api.md#same-origin-and-dev-origin)).
-- In the dev installation, `ivlia web` opens Vite; always browse `localhost`, not `127.0.0.1`, because cookies are per host.
+- `just dev-web` runs `episteme-server --reload` and Vite together. Vite listens on `http://localhost:5173` (`strictPort`) and proxies `/api` to the API with `changeOrigin: true` ([api.md](api.md#same-origin-and-dev-origin)).
+- In the dev installation, `episteme web` opens Vite; always browse `localhost`, not `127.0.0.1`, because cookies are per host.

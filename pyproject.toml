@@ -4,7 +4,7 @@
 # Install everything with `just setup` (`uv sync --locked --all-packages`): a
 # plain `uv sync` installs only one part and removes the rest.
 [project]
-name = "ivlia-workspace"
+name = "episteme-workspace"
 version = "0.0.0"
 requires-python = ">=3.14"
 license = "AGPL-3.0-or-later"

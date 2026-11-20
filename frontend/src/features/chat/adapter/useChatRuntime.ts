@@ -15,7 +15,7 @@ import {
   type ChatMessage,
 } from "../model/messages";
 
-/** assistant-ui's runtime over ivlia's own chat state and API. */
+/** assistant-ui's runtime over episteme's own chat state and API. */
 export function useChatRuntime() {
   const [messages, setMessages] = useState<readonly ChatMessage[]>([]);
   const [isRunning, setIsRunning] = useState(false);

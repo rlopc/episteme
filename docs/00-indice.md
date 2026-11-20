@@ -1,14 +1,14 @@
-# ivlia · 00 Índice
+# episteme · 00 Índice
 
 Nov 8, 2026 · @rlopc
 
-ivlia es un asistente personal de IA, 100 % local, para gestionar conocimiento de cualquier tipo. Este índice es el punto de entrada al diseño: no tiene contenido propio, solo enlaza a los documentos donde está cada tema.
+episteme (antes ivlia) es un asistente personal de IA, 100 % local, para gestionar conocimiento de cualquier tipo. Este índice es el punto de entrada al diseño: no tiene contenido propio, solo enlaza a los documentos donde está cada tema.
 
 ## Documentos
 
 | Documento | Qué cubre | Cuándo leerlo |
 | --- | --- | --- |
-| [01 Visión y alcance](01-vision-y-alcance.md) | Qué es ivlia, objetivos, fases, datos del proyecto y glosario | Primero |
+| [01 Visión y alcance](01-vision-y-alcance.md) | Qué es episteme, objetivos, fases, datos del proyecto y glosario | Primero |
 | [02 Arquitectura e interfaces](02-arquitectura-e-interfaces.md) | Clean y hexagonal, puertos, monorepo, contrato de la API, orquestación, CLI y web | Para entender cómo está construido |
 | [03 Agentes y herramientas](03-agentes-y-herramientas.md) | Agentes y delegación, puerto Tool, permisos, aprobaciones, sandbox y asistentes de proyecto | Al trabajar en agentes o acciones |
 | [04 Conocimiento y memoria](04-conocimiento-y-memoria.md) | Memoria, grafo de conocimiento, fuentes, indexado, búsqueda y calidad | Al trabajar en memoria o conocimiento |

@@ -5,9 +5,9 @@ export class ApiError extends Error {
 
 export function describeStatus(status: number): string {
   if (status === 401) {
-    return "Your session has ended. Run `ivlia web` to open a new one.";
+    return "Your session has ended. Run `episteme web` to open a new one.";
   }
   return `The API answered with status ${String(status)}.`;
 }
 
-export const UNREACHABLE = "Cannot reach the ivlia server. Is it running?";
+export const UNREACHABLE = "Cannot reach the episteme server. Is it running?";

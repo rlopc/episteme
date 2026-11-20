@@ -60,7 +60,7 @@ jobs:
 
       # Playwright's own advice: install the browser's system packages on each
       # run, and do not cache the browser.
-      - run: pnpm --filter ivlia-frontend exec playwright install-deps chromium
+      - run: pnpm --filter episteme-frontend exec playwright install-deps chromium
 
       - run: just check
 

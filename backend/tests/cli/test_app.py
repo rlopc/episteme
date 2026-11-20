@@ -7,11 +7,11 @@ import pytest
 from api_client import AUTH, make_client
 from typer.testing import CliRunner
 
-from ivlia.api.sessions import SessionStore
-from ivlia.cli import app as cli_app
-from ivlia.cli.app import build_app, connect_from_config
-from ivlia.cli.client import ApiClient
-from ivlia.config.errors import ConfigError
+from episteme.api.sessions import SessionStore
+from episteme.cli import app as cli_app
+from episteme.cli.app import build_app, connect_from_config
+from episteme.cli.client import ApiClient
+from episteme.config.errors import ConfigError
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -71,31 +71,31 @@ def test_ask_reports_an_error_event_and_fails() -> None:
     result = runner.invoke(_cli(_streaming(body)), ["ask", "hello"])
     assert result.exit_code == 1
     assert result.stdout == "Hel\n"
-    assert result.stderr == "ivlia: It broke.\n"
+    assert result.stderr == "episteme: It broke.\n"
 
 
 def test_ask_fails_when_the_answer_ends_early() -> None:
     body = b'data: {"type":"token","text":"Hel"}\n\n'
     result = runner.invoke(_cli(_streaming(body)), ["ask", "hello"])
     assert result.exit_code == 1
-    assert result.stderr == "ivlia: The answer ended before it was complete.\n"
+    assert result.stderr == "episteme: The answer ended before it was complete.\n"
 
 
 def test_ask_fails_clearly_without_a_server() -> None:
     result = runner.invoke(_cli(_refusing()), ["ask", "hello"])
     assert result.exit_code == 1
     assert result.stdout == ""
-    assert "Cannot reach the ivlia server" in result.stderr
+    assert "Cannot reach the episteme server" in result.stderr
 
 
 def test_ask_fails_clearly_on_a_configuration_error() -> None:
     def connect() -> ApiClient:
-        msg = "IVLIA_ENV is 'x'."
+        msg = "EPISTEME_ENV is 'x'."
         raise ConfigError(msg)
 
     result = runner.invoke(build_app(connect, _FakeBrowser()), ["ask", "hello"])
     assert result.exit_code == 1
-    assert result.stderr == "ivlia: IVLIA_ENV is 'x'.\n"
+    assert result.stderr == "episteme: EPISTEME_ENV is 'x'.\n"
 
 
 def test_web_opens_a_link_that_the_api_accepts_once() -> None:
@@ -109,7 +109,7 @@ def test_web_opens_a_link_that_the_api_accepts_once() -> None:
     # The browser sends no token: only the link signs it in.
     browser_http = make_client(sessions=sessions)
     assert browser_http.get(url).status_code == 303
-    assert "ivlia_session" in browser_http.cookies
+    assert "episteme_session" in browser_http.cookies
     assert browser_http.get(url).status_code == 401
 
 
@@ -125,7 +125,7 @@ def test_web_fails_clearly_without_a_server() -> None:
     browser = _FakeBrowser()
     result = runner.invoke(_cli(_refusing(), browser), ["web"])
     assert result.exit_code == 1
-    assert "Cannot reach the ivlia server" in result.stderr
+    assert "Cannot reach the episteme server" in result.stderr
     assert browser.urls == []
 
 
@@ -144,15 +144,15 @@ def test_no_command_shows_the_help() -> None:
 
 
 def _dev_installation(monkeypatch: pytest.MonkeyPatch, home: Path) -> None:
-    monkeypatch.setenv("IVLIA_ENV", "dev")
-    monkeypatch.setenv("IVLIA_HOME", str(home))
+    monkeypatch.setenv("EPISTEME_ENV", "dev")
+    monkeypatch.setenv("EPISTEME_HOME", str(home))
 
 
 def test_connect_from_config_uses_the_port_and_token(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     _dev_installation(monkeypatch, tmp_path)
-    monkeypatch.setenv("IVLIA_API_TOKEN", "t0ken")
+    monkeypatch.setenv("EPISTEME_API_TOKEN", "t0ken")
     with connect_from_config() as client:
         http = client._http
         assert http.base_url == "http://127.0.0.1:8766"
@@ -170,18 +170,18 @@ def test_connect_from_config_needs_a_token(
 
 def test_cli_logs_one_line_without_traceback() -> None:
     record = logging.LogRecord(
-        "ivlia", logging.WARNING, __file__, 1, "Keyring failed", None, None
+        "episteme", logging.WARNING, __file__, 1, "Keyring failed", None, None
     )
     try:
         raise RuntimeError("detail")  # noqa: TRY301 (to get real exception info)
     except RuntimeError:
         record.exc_info = sys.exc_info()
-    formatter = cli_app._MessageOnly("ivlia: %(message)s")
-    assert formatter.format(record) == "ivlia: Keyring failed"
+    formatter = cli_app._MessageOnly("episteme: %(message)s")
+    assert formatter.format(record) == "episteme: Keyring failed"
 
 
 def test_main_runs_the_cli(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(sys, "argv", ["ivlia", "--help"])
+    monkeypatch.setattr(sys, "argv", ["episteme", "--help"])
     with pytest.raises(SystemExit) as exit_info:
         cli_app.main()
     assert exit_info.value.code == 0
