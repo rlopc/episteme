@@ -47,6 +47,7 @@ uv tool install ./episteme-X.Y.Z-py3-none-any.whl
 ```
 
 - `gh attestation verify` checks that the wheel's digest matches an attestation made by this repository's release workflow (`--signer-workflow`). Offline: add `--bundle episteme-X.Y.Z-py3-none-any.whl.sigstore.json`.
+- Releases v0.1.0 to v0.1.2 were published when the repository was called `ivlia`. Their wheel is `ivlia-X.Y.Z-py3-none-any.whl`, their attestations name `rlopc/ivlia`, and they install `ivlia` and `ivlia-server`. Verify them with `--repo rlopc/ivlia` and `--signer-workflow rlopc/ivlia/.github/workflows/release.yml`. Checked online on 2026-11-20 with v0.1.2 only: the download with `--repo rlopc/episteme` works, that verification passes, and with `--repo rlopc/episteme` it fails (`Sigstore verification failed`). Not checked yet for these releases: the offline check and their environment variable names.
 - `uv tool install` exposes `episteme` and `episteme-server`. Installed from a wheel, PEP 610 records `archive_info`, so it starts as the use installation ([backend.md](backend.md#configuration)).
 - To try a release without touching `~/.local`, the real installation or the system keychain, set `UV_TOOL_DIR` and `UV_TOOL_BIN_DIR` to a folder inside `.dev/`, `EPISTEME_HOME` to a temporary folder and `EPISTEME_ENV=dev`, which never uses the keychain.
 - The release is created by release-please and then gets its assets. If GitHub's immutable releases are turned on, uploading to a published release fails: `publish` would then need release-please to create a draft and publish it at the end.
