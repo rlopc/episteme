@@ -30,7 +30,7 @@ jobs:
       # Only mise itself. The tools come from the `mise install --locked` step
       # below, with the job's token, because the cache step needs pnpm and uv;
       # `just setup` runs it again and finds nothing to install.
-      - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+      - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         with:
           # Same mise as on the Mac: mise.lock is format 4, which needs it.
           # Cooldown exception until 2026-11-16 (docs/standards/README.md).

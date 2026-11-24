@@ -79,7 +79,7 @@ jobs:
           persist-credentials: false
       # No cache in this workflow: a poisoned cache must not reach a release.
       - if: steps.release-pr.outputs.branch != ''
-        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+        uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         with:
           # The same mise as in ci.yml and on the Mac (see the comment there).
           version: 2026.11.5
@@ -126,7 +126,7 @@ jobs:
           ref: ${{ env.TAG }}
           persist-credentials: false
       # No cache in this workflow: a poisoned cache must not reach a release.
-      - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+      - uses: jdx/mise-action@236a21c3b91f5db6d4e174b348674a0f0caac06d # v5.2.9
         with:
           # The same mise as in ci.yml and on the Mac (see the comment there).
           version: 2026.11.5
