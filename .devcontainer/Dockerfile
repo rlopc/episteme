@@ -7,7 +7,9 @@ FROM mcr.microsoft.com/devcontainers/base:3-ubuntu26.04
 COPY managed-settings.json /etc/claude-code/managed-settings.json
 
 USER vscode
-ENV PATH=/home/vscode/.local/bin:$PATH
+# mise's shims give non-interactive shells (docker exec, bash -l -c, scripts and
+# agents) the locked tools; the interactive bash still activates mise in .bashrc.
+ENV PATH=/home/vscode/.local/bin:/home/vscode/.local/share/mise/shims:$PATH
 
 # Same mise as min_version in mise.toml; mise.run verifies it against SHASUMS256.
 RUN curl -fsSL https://mise.run | MISE_VERSION=v2026.11.5 sh \
