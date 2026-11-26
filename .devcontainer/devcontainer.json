@@ -14,17 +14,23 @@
     // VS Code applies .vscode/, so nothing in the container may change them.
     // Edit them on the host.
     "source=${localWorkspaceFolder}/.devcontainer,target=${containerWorkspaceFolder}/.devcontainer,type=bind,readonly",
-    "source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,readonly"
+    "source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,readonly",
+    // Docker Desktop's SSH agent, so git can sign and push from any session,
+    // not only from VS Code's terminals.
+    "source=/run/host-services/ssh-auth.sock,target=/run/host-services/ssh-auth.sock,type=bind"
   ],
   // Keeps ~/.claude.json inside the Claude volume too, so it survives rebuilds.
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
     // localhost resolves to ::1 first here, so Vite would listen only on IPv6,
     // and VS Code's port forwarding connects to 127.0.0.1.
-    "NODE_OPTIONS": "--dns-result-order=ipv4first"
+    "NODE_OPTIONS": "--dns-result-order=ipv4first",
+    "SSH_AUTH_SOCK": "/run/host-services/ssh-auth.sock"
   },
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
+  // Docker Desktop's SSH agent socket is owned by root; vscode needs it.
+  "postStartCommand": "sudo chown vscode /run/host-services/ssh-auth.sock",
   "waitFor": "postCreateCommand",
 
   // The API accepts only the origin http://localhost:5173, so the port must not
