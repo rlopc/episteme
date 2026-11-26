@@ -118,7 +118,7 @@ Never edited by hand; regenerated with their command and excluded from Prettier,
 - `README.md`, `SECURITY.md`, `CONTRIBUTING.md` and `LICENSE` at the root.
 - `.github/`: [pull request template](../../.github/pull_request_template.md) and issue forms (bug report, feature request) with blank issues disabled and a link to private security reporting.
 - No CODEOWNERS, Code of Conduct or DCO until contributions open.
-- `.gitignore` excludes local files (`*.local.*`), `.dev/` (the dev installation, Validar reports, review diffs), mise's local state in `.mise/`, and build and cache outputs.
+- `.gitignore` excludes local files (`*.local.*`), `/inbox/` (proposals left by other projects' agents), `.dev/` (the dev installation, Validar reports, review diffs), mise's local state in `.mise/`, and build and cache outputs.
 
 ## License
 

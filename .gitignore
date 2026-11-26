@@ -2,6 +2,9 @@
 *.local.*
 .DS_Store
 
+# Proposals left by other projects' agents
+/inbox/
+
 # Dev installation data, Validar reports and review diffs
 .dev/
 
